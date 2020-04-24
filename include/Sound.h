@@ -7,7 +7,7 @@
 #include <Wire.h>
 #include "DFRobotDFPlayerMini.h"
 
-extern void sendMessage(String);
+extern void sendDataToMicrobit(String);
 extern void printMessage(String);
 
 class Sound

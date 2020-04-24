@@ -43,7 +43,7 @@ void Display::loop()
 void Display::printMessage(String line)
 {
     lines.push_back(line);
-    Serial.println(line);
+    //Serial.println(line);
 
     if (lines.size() > 6)
     {

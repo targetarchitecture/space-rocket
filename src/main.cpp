@@ -22,9 +22,10 @@ String message = ""; // a string to hold incoming data
 
 void printMessage(String);
 void handleEvents();
-void sendMessage(String message);
-void getSerialMessage();
+void sendDataToMicrobit(String message);
+void getDataFromMicrobit();
 std::list<String> splitStringToList(String);
+std::list<String> debugs(String);
 
 void setup()
 {
@@ -57,7 +58,7 @@ void loop()
     touch.loop();
     features.loop();
 
-    getSerialMessage();
+    getDataFromMicrobit();
 
     handleEvents();
 
@@ -112,10 +113,19 @@ void handleEvents()
         else if (action.equalsIgnoreCase("features"))
         {
             features.execute(values);
-        }               
+        }
+        else
+        {
+            Serial.println("Message recieved in loop from MicroBit:" + message);
+            // Serial.println(message);
+        }
+        // else if (action.equalsIgnoreCase("message"))
+        // {
+        //     display.printMessage(message);
+        // }
 
         message = "";
-    } 
+    }
 }
 
 //http://www.cplusplus.com/reference/list/list/pop_front/
@@ -135,9 +145,11 @@ std::list<String> splitStringToList(String msg)
     return subStrings;
 }
 
-void sendMessage(String message)
+void sendDataToMicrobit(String message)
 {
-    Serial.println(message);
+    Serial.println("Sending to MicroBit:" + message);
+    //Serial.println(message);
+    //   Serial.flush();
 
     try
     {
@@ -146,12 +158,12 @@ void sendMessage(String message)
     }
     catch (int e)
     {
-        Serial.print("An exception occurred. Exception Nr. ");
+        Serial.print("An exception occurred sending to MicroBit. Exception Nr. ");
         Serial.println(e, DEC);
     }
 }
 
-void getSerialMessage()
+void getDataFromMicrobit()
 {
     //String partialMessage = ""; // a string to hold incoming data
 
@@ -178,6 +190,7 @@ void getSerialMessage()
     while (Serial2.available())
     {
         message = Serial2.readString();
+        message.trim();
 
         //     // get the new byte:
         //     char inChar = (char)Serial2.read();
@@ -195,5 +208,12 @@ void getSerialMessage()
         //       // add it to the inputString:
         //       partialMessage += inChar;
         //     }
+    }
+
+    if (message != "")
+    {
+        Serial.println("Recieved from MicroBit:" + message);
+        // Serial.println(message);
+        // Serial.flush();
     }
 }
