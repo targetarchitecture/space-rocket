@@ -153,7 +153,8 @@ void sendDataToMicrobit(String message)
 
     try
     {
-        Serial2.println(message);
+        Serial2.print(message);
+        // Serial2.println(message);
         Serial2.flush();
     }
     catch (int e)
@@ -163,57 +164,59 @@ void sendDataToMicrobit(String message)
     }
 }
 
+//https://forum.arduino.cc/index.php?topic=396450.0
+const byte numChars = 32;
+char receivedChars[numChars];
+
+boolean newData = false;
+
 void getDataFromMicrobit()
 {
-    //String partialMessage = ""; // a string to hold incoming data
+    static boolean recvInProgress = false;
+    static byte ndx = 0;
+    char startMarker = '{';
+    char endMarker = '}';
+    char rc;
 
-    //   while (Serial.available())
-    //   {
-    //     // get the new byte:
-    //     char inChar = (char)Serial.read();
-
-    //     //end of message character
-    //     if (inChar == '}') // '\n')
-    //     {
-    //       message = partialMessage;
-
-    //       // clear the string:
-    //       partialMessage = "";
-    //     }
-    //     else
-    //     {
-    //       // add it to the inputString:
-    //       partialMessage += inChar;
-    //     }
-    //   }
-
-    while (Serial2.available())
+    while (Serial2.available() > 0 && newData == false)
     {
-        message = Serial2.readString();
-        message.trim();
+        rc = Serial2.read();
 
-        //     // get the new byte:
-        //     char inChar = (char)Serial2.read();
-
-        //     //end of message character
-        //     if (inChar == '}') // '\n')
-        //     {
-        //       message = partialMessage;
-
-        //       // clear the string:
-        //       partialMessage = "";
-        //     }
-        //     else
-        //     {
-        //       // add it to the inputString:
-        //       partialMessage += inChar;
-        //     }
+        if (recvInProgress == true)
+        {
+            if (rc != endMarker)
+            {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars)
+                {
+                    ndx = numChars - 1;
+                }
+            }
+            else
+            {
+                receivedChars[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+            }
+        }
+        else if (rc == startMarker)
+        {
+            recvInProgress = true;
+        }
     }
 
-    if (message != "")
+    if (newData == true)
     {
-        Serial.println("Recieved from MicroBit:" + message);
-        // Serial.println(message);
-        // Serial.flush();
+        //quick debug
+        Serial.print("Recieved from MicroBit:");
+        Serial.println(receivedChars);
+
+        //set the message variable
+        message = receivedChars;
+
+        //reset to get next message
+        newData = false;
     }
 }
