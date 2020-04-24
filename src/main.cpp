@@ -1,109 +1,199 @@
-serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
-    //messages.push(serial.readUntil(serial.delimiters(Delimiters.NewLine)))
-    messages.push(serial.readLine())
-})
-input.onButtonPressed(Button.A, function () {
-    serial.writeLine("{sound,play,4}")
-    // serial.writeLine("{light,on,7,15}")
-    //serial.writeLine("{light,on,8}")
-    // serial.writeLine("{light,breathe,8,1000,1000,1000,1000}")
-    // serial.writeLine("{light,blink,0,1000,1000,1000,1000}")
-    // serial.writeLine("{light,breathe,7,100,100,100,100}")
-    // serial.writeLine("{light,breathe,15,1000,1000,1000,1000}")
-})
-input.onButtonPressed(Button.B, function () {
-    serial.writeLine("{sound,stop}")
-    // serial.writeLine("{light,off,0,8,15,7}")
-})
-// let recievedValue = ""
-// let recievedState = ""
-// let recievedEvent = ""
-let messages: string[] = []
-//let parts: string[] = []
-//let message = ""
-let sourceSound = 10000
-let sourceTouchTouched = 10100
-let sourceTouchReleased = 10101
-let sourceSoundBusy = 10200
-let soundBusy = -1
-serial.redirect(
-    SerialPin.P8,
-    SerialPin.P12,
-    BaudRate.BaudRate9600
-)
-serial.setRxBufferSize(64)
-basic.showIcon(IconNames.Heart)
-basic.forever(function () {
-    if (messages.length > 0) {
-        let message = messages.shift()
+/*********************************************************
+Ada's Super Computer
+**********************************************************/
+#include <Arduino.h>
+#include <list>
 
-        message = message.substr(1, message.length - 2)
+#include "Display.h"
+#include "Sound.h"
+#include "Touch.h"
+#include "Light.h"
+#include "Motion.h"
+#include "Features.h"
 
-        let parts = message.split(",")
+Display display;
+Sound sound;
+Motion motion;
+Touch touch;
+Features features;
+Light light;
 
-        let recievedEvent = parts[0]
-        let recievedState = parts[1]
-        let recievedValue = parts[2]
+String message = ""; // a string to hold incoming data
 
-        recievedValue = recievedValue.slice(0, -1) //seems to be needed to remove extra characters from the serial transfer
+void printMessage(String);
+void handleEvents();
+void sendMessage(String message);
+void getSerialMessage();
+std::list<String> splitStringToList(String);
 
-        let recievedIntValue = parseInt(recievedValue);
+void setup()
+{
+    Serial.begin(115200);  //ESP32 USB Port
+    Serial2.begin(115200); //BBC Microbit Serial
+    Wire.begin();          //I2C bus
 
-        serial.writeLine("{message,message:" + message + "}")
-        serial.writeLine("{message,recievedIntValue:" + recievedIntValue + "}")
-        //serial.writeLine("{message,recievedState:" + recievedState + "}")
-        //serial.writeLine("{message,recievedValue:" + recievedValue + "}")
+    delay(10);
 
-        if (recievedEvent == "touch") {
-            if (recievedState == "touched") {
-                control.raiseEvent(
-                    sourceTouchTouched,
-                    recievedIntValue
-                )
-            }
-            if (recievedState == "released") {
-                //serial.writeLine("{message," + "touch me in the morning" + "}")
-                control.raiseEvent(
-                    sourceTouchReleased,
-                    recievedIntValue
-                )
-            }
+    display.begin();
+
+    sound.begin();
+    touch.begin();
+    features.begin();
+    light.begin();
+    motion.begin();
+
+    //clear the buffers to begin processing
+    delay(10);
+    Serial.flush();
+    Serial2.flush();
+    delay(10);
+}
+
+void loop()
+{
+    display.loop();
+    sound.loop();
+    motion.loop();
+    touch.loop();
+    features.loop();
+
+    getSerialMessage();
+
+    handleEvents();
+
+    delay(10);
+}
+
+void printMessage(String message)
+{
+    display.printMessage(message);
+}
+
+void handleEvents()
+{
+    if (message != "")
+    {
+        //remove troublesome characters
+        message.replace("{", "");
+        message.replace("}", "");
+        message.replace("\n", "");
+        message.trim();
+
+        //debug and print back
+        // Serial.print("message:");
+        // Serial.println(message);
+
+        std::list<String> splitMessage;
+
+        splitMessage.clear();
+        splitMessage = splitStringToList(message);
+
+        String action = splitMessage.front();
+        splitMessage.pop_front();
+
+        std::list<String> values = splitMessage;
+
+        //debug and print back
+        // Serial.print("action:");
+        // Serial.println(action);
+        // Serial.print("function:");
+        // Serial.println(function);
+        // Serial.print("values:");
+        // Serial.println(values);
+
+        if (action.equalsIgnoreCase("sound"))
+        {
+            sound.execute(values);
         }
+        else if (action.equalsIgnoreCase("motion"))
+        {
+            motion.execute(values);
+        }
+        else if (action.equalsIgnoreCase("features"))
+        {
+            features.execute(values);
+        }               
 
-        if (recievedEvent == "sound") {
-            if (recievedState == "busy") {
-                //                 let t = parseInt(recievedValue)
-                //serial.writeLine("{message," + "raised busy event" + "}")
-                //serial.writeLine("{message,>>" + t + "<<}")
-                soundBusy = recievedIntValue;
-                control.raiseEvent(
-                    sourceSoundBusy,
-                    soundBusy
-                )
-            }
+        message = "";
+    } 
+}
+
+//http://www.cplusplus.com/reference/list/list/pop_front/
+std::list<String> splitStringToList(String msg)
+{
+    std::list<String> subStrings;
+    int j = 0;
+    for (int i = 0; i < msg.length(); i++)
+    {
+        if (msg.charAt(i) == ',')
+        {
+            subStrings.push_back(msg.substring(j, i));
+            j = i + 1;
         }
     }
-})
+    subStrings.push_back(msg.substring(j, msg.length())); //to grab the last value of the string
+    return subStrings;
+}
 
-control.onEvent(sourceSoundBusy, 0, function () {
-    basic.showNumber(soundBusy)
-})
+void sendMessage(String message)
+{
+    Serial.println(message);
 
-control.onEvent(sourceSoundBusy, 1, function () {
-    basic.showNumber(soundBusy)
-})
+    try
+    {
+        Serial2.println(message);
+        Serial2.flush();
+    }
+    catch (int e)
+    {
+        Serial.print("An exception occurred. Exception Nr. ");
+        Serial.println(e, DEC);
+    }
+}
 
-control.onEvent(sourceTouchReleased, 1, function () {
-    basic.showString("T")
-})
+void getSerialMessage()
+{
+    //String partialMessage = ""; // a string to hold incoming data
 
-control.onEvent(sourceTouchReleased, 10, function () {
-    basic.showIcon(IconNames.No)
-})
+    //   while (Serial.available())
+    //   {
+    //     // get the new byte:
+    //     char inChar = (char)Serial.read();
 
-// control.onEvent(sourceTouchTouched, 10, function () {
-//     basic.showIcon(IconNames.Yes)
-// })
+    //     //end of message character
+    //     if (inChar == '}') // '\n')
+    //     {
+    //       message = partialMessage;
 
+    //       // clear the string:
+    //       partialMessage = "";
+    //     }
+    //     else
+    //     {
+    //       // add it to the inputString:
+    //       partialMessage += inChar;
+    //     }
+    //   }
 
+    while (Serial2.available())
+    {
+        message = Serial2.readString();
 
+        //     // get the new byte:
+        //     char inChar = (char)Serial2.read();
+
+        //     //end of message character
+        //     if (inChar == '}') // '\n')
+        //     {
+        //       message = partialMessage;
+
+        //       // clear the string:
+        //       partialMessage = "";
+        //     }
+        //     else
+        //     {
+        //       // add it to the inputString:
+        //       partialMessage += inChar;
+        //     }
+    }
+}
