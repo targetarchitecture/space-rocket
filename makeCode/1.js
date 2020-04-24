@@ -13,7 +13,7 @@ input.onButtonPressed(Button.A, function () {
     //serial.writeLine("{light,on,7}")
     //serial.writeLine("{light,on,8}")
     //serial.writeLine("{light,on,15}")
-})
+})   
 input.onButtonPressed(Button.B, function () {
     serial.writeLine("{sound,stop}")
     serial.writeLine("{light,off,0,8,15,7}")
