@@ -10,6 +10,8 @@
 #define _BV(bit) (1 << (bit))
 #endif
 
+extern void sendMessage(String);
+
 class Touch
 {
 public:

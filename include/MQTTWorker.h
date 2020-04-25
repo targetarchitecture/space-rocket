@@ -1,5 +1,4 @@
 #ifndef MQTTWorker_h
-
 #define MQTTWorker_h
 
 #include <Arduino.h>
@@ -10,17 +9,19 @@
 
 #include "credentials.h"
 
-class MQTTWorker
-{
-public:
-  void begin();
-  void loop();
+WiFiClient espClient;
+PubSubClient MQTTClient(espClient);
 
-private:
-  PubSubClient MQTTClient;
-  void callback(char *topic, byte *payload, unsigned int length);
-  void publishMQTTmessage(String msg);
-  void setupWifi();
-};
+extern void printMessage(String);
+extern String message;
+
+// void MQTT_begin();
+// void MQTT_loop();
+void reconnect();
+void sendMessage(String message);
+void messageRecieved(char *topic, byte *payload, unsigned int length);
+//void publishMQTTmessage(String msg);
+void setupWifi();
+void setupMQTTClient();
 
 #endif

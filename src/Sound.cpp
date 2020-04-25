@@ -54,7 +54,7 @@ void Sound::loop()
     response.concat(currentBusy);
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
 
     previousBusy = currentBusy;
   }
@@ -94,7 +94,7 @@ void Sound::execute(std::list<String> values)
     response.concat(volume);
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
   }
 
   if (function.equalsIgnoreCase("play"))
@@ -138,7 +138,7 @@ void Sound::execute(std::list<String> values)
     response.concat(myDFPlayer.readVolume());
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
   }
 
   if (function.equalsIgnoreCase("readCurrentFileNumber"))
@@ -149,7 +149,7 @@ void Sound::execute(std::list<String> values)
     response.concat(myDFPlayer.readCurrentFileNumber());
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
   }
 
   if (function.equalsIgnoreCase("volumeUp"))
@@ -162,7 +162,7 @@ void Sound::execute(std::list<String> values)
     response.concat(myDFPlayer.readVolume());
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
   }
 
   if (function.equalsIgnoreCase("busy"))
@@ -173,7 +173,7 @@ void Sound::execute(std::list<String> values)
     response.concat(busy());
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
   }
 
   if (function.equalsIgnoreCase("readState"))
@@ -184,7 +184,7 @@ void Sound::execute(std::list<String> values)
     response.concat(myDFPlayer.readState());
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
   }
 
   if (function.equalsIgnoreCase("readVolume"))
@@ -197,6 +197,6 @@ void Sound::execute(std::list<String> values)
     response.concat(volume);
     response.concat("}");
 
-    sendDataToMicrobit(response);
+    sendMessage(response);
   }
 }

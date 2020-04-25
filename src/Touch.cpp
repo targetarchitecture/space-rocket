@@ -3,7 +3,7 @@
 
 #define INFO // to see serial output of loop
 
-extern void sendDataToMicrobit(String);
+extern void sendMessage(String);
 extern void printMessage(String);
 
 void Touch::begin()
@@ -36,9 +36,7 @@ void Touch::loop()
       response.concat(i);
       response.concat("}");
 
-      sendDataToMicrobit(response);
-
-      //delay(10);
+      sendMessage(response);
 
       char buffer[50];
       sprintf(buffer, "%i touched", i);
@@ -54,9 +52,7 @@ void Touch::loop()
       response.concat(i);
       response.concat("}");
 
-      sendDataToMicrobit(response);
-
-      //delay(10);
+      sendMessage(response);
 
       char buffer[50];
       sprintf(buffer, "%i released", i);

@@ -7,7 +7,7 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-extern void sendDataToMicrobit(String);
+extern void sendMessage(String);
 extern void printMessage(String);
 
 class Motion

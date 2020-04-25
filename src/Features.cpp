@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include "Features.h"
 
-
-
 void Features::begin()
 {
     //set roatary encoder pins
@@ -46,7 +44,7 @@ void Features::loop()
         response.concat(newEncoder1Count);
         response.concat("}");
 
-        sendDataToMicrobit(response);
+        sendMessage(response);
 
         encoder1Count = newEncoder1Count;
     }
@@ -59,7 +57,7 @@ void Features::loop()
         response.concat(newEncoder2Count);
         response.concat("}");
 
-        sendDataToMicrobit(response);
+        sendMessage(response);
 
         encoder2Count = newEncoder2Count;
     }
@@ -129,7 +127,7 @@ void Features::execute(std::list<String> values)
             response.concat(newEncoder1Count);
             response.concat("}");
 
-            sendDataToMicrobit(response);
+            sendMessage(response);
         }
         else
         {
@@ -141,7 +139,7 @@ void Features::execute(std::list<String> values)
             response.concat(newEncoder2Count);
             response.concat("}");
 
-            sendDataToMicrobit(response);
+            sendMessage(response);
         }
     }
 }

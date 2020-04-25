@@ -10,7 +10,7 @@ Ada's Super Computer
 #include "Light.h"
 #include "Motion.h"
 #include "Features.h"
-#include "MQTTWorker.h"
+//#include "MQTTWorker.h"
 
 Display display;
 Sound sound;
@@ -19,19 +19,20 @@ Touch touch;
 Features features;
 Light light;
 
-
-
 String message = ""; // a string to hold incoming data
 
 void printMessage(String);
 void handleEvents();
+//void sendMessage(String);
 std::list<String> splitStringToList(String);
-std::list<String> debugs(String);
+//std::list<String> debugs(String);
+void MQTT_begin();
+void MQTT_loop();
 
 void setup()
 {
-    Serial.begin(115200);  //ESP32 USB Port
-    Wire.begin();          //I2C bus
+    Serial.begin(115200); //ESP32 USB Port
+    Wire.begin();         //I2C bus
 
     delay(10);
 
@@ -41,6 +42,8 @@ void setup()
     features.begin();
     light.begin();
     motion.begin();
+
+    MQTT_begin();
 }
 
 void loop()
@@ -51,7 +54,7 @@ void loop()
     touch.loop();
     features.loop();
 
-    getDataFromMicrobit();
+    MQTT_loop();
 
     handleEvents();
 
@@ -65,6 +68,42 @@ void printMessage(String message)
 
 void handleEvents()
 {
+    //   if (std::string(topic) == std::string(MQTT_STOP_TOPIC))
+    //   {
+    //     if (message.equalsIgnoreCase("stop") == true)
+    //     {
+    //       dfPlayer.stop(); // Stop the track
+    //       delay(200);
+    //       publishMQTTmessage("Stopped play");
+    //     }
+    //   }
+
+    //   if (std::string(topic) == std::string(MQTT_PLAY_TOPIC))
+    //   {
+    //     int playTrack = message.toInt();
+
+    //     dfPlayer.stop(); // Stop the track
+    //     delay(200);
+
+    //     dfPlayer.play(playTrack); // Play the track specified
+
+    //     publishMQTTmessage("Playing track " + message);
+    //   }
+
+    //   if (std::string(topic) == std::string(MQTT_VOLUME_TOPIC))
+    //   {
+    //     int nvsVolume = message.toInt();
+
+    //     dfPlayer.volume(nvsVolume);
+    //     delay(200);
+
+    //     publishMQTTmessage("Volume set to " + message);
+
+    //     settings.putInt("volume", nvsVolume);
+    //     nvsVolume = settings.getInt("volume", DefaultVolume);
+    //     publishMQTTmessage("Volume from NVS: " + String(nvsVolume));
+    //   }
+
     if (message != "")
     {
         //remove troublesome characters
@@ -137,5 +176,3 @@ std::list<String> splitStringToList(String msg)
     subStrings.push_back(msg.substring(j, msg.length())); //to grab the last value of the string
     return subStrings;
 }
-
-

@@ -44,7 +44,7 @@ void Light::execute(std::list<String> values)
                 sx1509.pinMode(otherPins.toInt(), OUTPUT);    // Set LED pin to OUTPUT
                 sx1509.digitalWrite(otherPins.toInt(), HIGH); //set to ON for Ada!
 
-                        delay(10);
+                delay(10);
             }
         }
 
