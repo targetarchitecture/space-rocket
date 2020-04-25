@@ -7,7 +7,7 @@
 #include <Wire.h>
 #include <ESP32Encoder.h>
 
-extern void sendDataToMicrobit(String);
+//extern void sendDataToMicrobit(String);
 extern void printMessage(String);
 
 class Features
