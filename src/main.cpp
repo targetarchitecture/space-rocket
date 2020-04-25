@@ -30,7 +30,7 @@ std::list<String> debugs(String);
 void setup()
 {
     Serial.begin(115200);  //ESP32 USB Port
-    Serial2.begin(115200); //BBC Microbit Serial
+    Serial2.begin(28800);  //BBC Microbit Serial
     Wire.begin();          //I2C bus
 
     delay(10);
@@ -154,8 +154,8 @@ void sendDataToMicrobit(String message)
     try
     {
         Serial2.print(message);
-        // Serial2.println(message);
-        Serial2.flush();
+      
+      //  Serial2.flush();
     }
     catch (int e)
     {
