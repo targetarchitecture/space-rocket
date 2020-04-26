@@ -19,7 +19,7 @@ Touch touch;
 Features features;
 Light light;
 
-String message = ""; // a string to hold incoming data
+//String message = ""; // a string to hold incoming data
 
 void printMessage(String);
 void handleEvents();
@@ -68,6 +68,8 @@ void printMessage(String message)
 
 void handleEvents()
 {
+sn1/sound/
+
     //   if (std::string(topic) == std::string(MQTT_STOP_TOPIC))
     //   {
     //     if (message.equalsIgnoreCase("stop") == true)

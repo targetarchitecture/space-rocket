@@ -38,26 +38,26 @@ void Features::loop()
 
     if (newEncoder1Count != encoder1Count)
     {
-        String response = "";
+        // String response = "";
 
-        response.concat("{feature,encoder,1,");
-        response.concat(newEncoder1Count);
-        response.concat("}");
+        // response.concat("{feature,encoder,1,");
+        // response.concat(newEncoder1Count);
+        // response.concat("}");
 
-        sendMessage(response);
+        // sendMessage(response);
 
         encoder1Count = newEncoder1Count;
     }
 
     if (newEncoder2Count != encoder2Count)
     {
-        String response = "";
+        // String response = "";
 
-        response.concat("{feature,encoder,2,");
-        response.concat(newEncoder2Count);
-        response.concat("}");
+        // response.concat("{feature,encoder,2,");
+        // response.concat(newEncoder2Count);
+        // response.concat("}");
 
-        sendMessage(response);
+        // sendMessage(response);
 
         encoder2Count = newEncoder2Count;
     }
@@ -121,25 +121,25 @@ void Features::execute(std::list<String> values)
         {
             int32_t newEncoder1Count = encoder1.getCount();
 
-            String response = "";
+            // String response = "";
 
-            response.concat("{feature,encoderCount,1,");
-            response.concat(newEncoder1Count);
-            response.concat("}");
+            // response.concat("{feature,encoderCount,1,");
+            // response.concat(newEncoder1Count);
+            // response.concat("}");
 
-            sendMessage(response);
+            // sendMessage(response);
         }
         else
         {
             int32_t newEncoder2Count = encoder2.getCount();
 
-            String response = "";
+            // String response = "";
 
-            response.concat("{feature,encoderCount,2,");
-            response.concat(newEncoder2Count);
-            response.concat("}");
+            // response.concat("{feature,encoderCount,2,");
+            // response.concat(newEncoder2Count);
+            // response.concat("}");
 
-            sendMessage(response);
+            // sendMessage(response);
         }
     }
 }

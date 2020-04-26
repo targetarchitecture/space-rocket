@@ -5,9 +5,12 @@
 #include <Arduino.h>
 #include <list>
 #include <Wire.h>
+//#include <fmt/core.h>
+#include <fmt/format.h>
 #include "DFRobotDFPlayerMini.h"
 
-extern void sendMessage(String);
+//extern void sendMessage(String);
+extern void sendMessage(char *topic, char *message);
 extern void printMessage(String);
 
 class Sound

@@ -84,17 +84,12 @@ void Sound::execute(std::list<String> values)
   if (function.equalsIgnoreCase("volume"))
   {
     int volume = values.front().toInt();
-    volume = min(volume, 30); //Set volume value (0~30).
+    volume = constrain(volume,0,30);//Set volume value (0~30).
 
     myDFPlayer.volume(volume);
 
-    String response = "";
-
-    response.concat("{sound,volume,");
-    response.concat(volume);
-    response.concat("}");
-
-    sendMessage(response);
+//std::string s = fmt::format("{sound,volume,%s}", volume);
+    //sendMessage("sn1/sound/volume"  s.c_str());
   }
 
   if (function.equalsIgnoreCase("play"))

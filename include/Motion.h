@@ -7,7 +7,8 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-extern void sendMessage(String);
+//extern void sendMessage(String);
+extern void sendMessage(char *topic, char *message);
 extern void printMessage(String);
 
 class Motion

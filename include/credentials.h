@@ -3,7 +3,7 @@
 #define MQTT_USERNAME "AdasSuperComputerSN1"
 #define MQTT_KEY "468ab0b8"
 
-#define MQTT_TOPIC "sn1/state"
+#define MQTT_TOPIC2 "sn1/state"
 
 #define MQTT_CLIENTID "Ada's Super Computer SN1"
 

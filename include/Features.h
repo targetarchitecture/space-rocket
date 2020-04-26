@@ -7,7 +7,8 @@
 #include <Wire.h>
 #include <ESP32Encoder.h>
 
-extern void sendMessage(String);
+extern void sendMessage(char *topic, char *message);
+//extern void sendMessage(String);
 extern void printMessage(String);
 
 class Features
