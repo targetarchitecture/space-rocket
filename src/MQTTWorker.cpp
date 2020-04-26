@@ -59,7 +59,7 @@ void reconnect()
             // Once connected, publish an announcement...
             MQTTClient.publish(MQTT_TOPIC, "Reconnected");
             // ... and resubscribe
-            MQTTClient.subscribe(MQTT_PLAY_TOPIC);
+            MQTTClient.subscribe(MQTT_ACTION_TOPIC);
         }
         else
         {
@@ -103,9 +103,9 @@ void setupMQTTClient()
         MQTTClient.publish(MQTT_TOPIC, "Connected to MQTT server");
 
         Serial.println("subscribe");
-        MQTTClient.subscribe(MQTT_PLAY_TOPIC);
-        MQTTClient.subscribe(MQTT_VOLUME_TOPIC);
-        MQTTClient.subscribe(MQTT_STOP_TOPIC);
+        MQTTClient.subscribe(MQTT_ACTION_TOPIC);
+        // MQTTClient.subscribe(MQTT_VOLUME_TOPIC);
+        // MQTTClient.subscribe(MQTT_STOP_TOPIC);
     }
 }
 

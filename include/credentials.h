@@ -1,12 +1,10 @@
 //set up the credentials
 #define MQTT_SERVER "robotmqtt"
-#define MQTT_USERNAME "Halloween"
-#define MQTT_KEY "9469f488ee17"
+#define MQTT_USERNAME "AdasSuperComputerSN1"
+#define MQTT_KEY "468ab0b8"
 
-#define MQTT_TOPIC "halloween"
-#define MQTT_PLAY_TOPIC "halloween/play"
-#define MQTT_VOLUME_TOPIC "halloween/volume"
-#define MQTT_STOP_TOPIC "halloween/stop"
+#define MQTT_TOPIC "rocket"
+#define MQTT_ACTION_TOPIC "rocket/action"
 
 #define MQTT_CLIENTID "Ada's Super Computer SN1"
 
