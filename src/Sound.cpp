@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "Sound.h"
 
+using namespace std;
+
 void Sound::begin()
 {
   //Configure serial port pins and busy pin
@@ -48,7 +50,9 @@ void Sound::loop()
 
   if (currentBusy != previousBusy)
   {
-    sendMessage("sn1/sound/busy", "%s", currentBusy);
+    string message = "";// fmt::format("%s", currentBusy);
+
+    sendMessage("sn1/sound/busy", message.c_str());
 
     previousBusy = currentBusy;
   }
@@ -125,7 +129,9 @@ void Sound::execute(String topic, String payload)
     // response.concat(myDFPlayer.readVolume());
     // response.concat("}");
 
-    sendMessage("sn1/sound/volume", "%s", myDFPlayer.readVolume());
+    string message =""; // fmt::format("%s", myDFPlayer.readVolume());
+
+    sendMessage("sn1/sound/volume", message.c_str());
   }
 
   if (function.equalsIgnoreCase("readCurrentFileNumber"))
@@ -138,7 +144,13 @@ void Sound::execute(String topic, String payload)
 
     // sendMessage(response);
 
-        sendMessage("sn1/sound/currentFile", "%s", myDFPlayer.readCurrentFileNumber());
+//     string message = fmt::format("%s", myDFPlayer.readCurrentFileNumber());
+
+// message.
+
+std::string message ="";// std::format("The answer is {}.", 42);
+
+    sendMessage("sn1/sound/currentFile", message.c_str());
   }
 
   if (function.equalsIgnoreCase("volumeUp"))
@@ -153,7 +165,9 @@ void Sound::execute(String topic, String payload)
 
     // sendMessage(response);
 
-        sendMessage("sn1/sound/volume", "%s", myDFPlayer.readVolume());
+    string message = ""; //fmt::format("%s", myDFPlayer.readVolume());
+
+    sendMessage("sn1/sound/volume", message.c_str());
   }
 
   if (function.equalsIgnoreCase("read busy"))
@@ -166,22 +180,28 @@ void Sound::execute(String topic, String payload)
 
     // sendMessage(response);
 
-    sendMessage("sn1/sound/busy", "%s", busy());
+    string message = ""; //fmt::format("%s", busy());
+
+    sendMessage("sn1/sound/volume", message.c_str());
   }
 
   if (function.equalsIgnoreCase("readState"))
   {
-//     String response = "";
+    //     String response = "";
 
-//     response.concat("{sound,state,");
-//     response.concat(myDFPlayer.readState());
-//     response.concat("}");
+    //     response.concat("{sound,state,");
+    //     response.concat(myDFPlayer.readState());
+    //     response.concat("}");
 
-//  sn1/sound/state
+    //  sn1/sound/state
 
-//     sendMessage(response);
+    //     sendMessage(response);
 
-      sendMessage("sn1/sound/state", "%s", myDFPlayer.readState());
+    //    sendMessage("sn1/sound/state", "%s", myDFPlayer.readState());
+
+    string message ="";// fmt::format("%s", myDFPlayer.readState());
+
+    sendMessage("sn1/sound/state", message.c_str());
   }
 
   if (function.equalsIgnoreCase("read Volume"))
@@ -196,6 +216,8 @@ void Sound::execute(String topic, String payload)
 
     // sendMessage(response);
 
-     sendMessage("sn1/sound/volume", "%s", myDFPlayer.readVolume());
+    string message = "";// fmt::format("%s", myDFPlayer.readVolume());
+
+    sendMessage("sn1/sound/volume", message.c_str());
   }
 }

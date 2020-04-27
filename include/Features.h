@@ -8,8 +8,7 @@
 //#include <fmt/format.h>
 #include <ESP32Encoder.h>
 
-template <typename... Args>
-extern void sendMessage(const char *topic,const char *message, const Args & ... args);
+extern void sendMessage(const char *topic,const char *message);
 
 //extern void sendMessage(const char *topic, const char *message, fmt::format_args args);
 //extern void sendMessage(char *topic, char *message);

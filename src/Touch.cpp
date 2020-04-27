@@ -3,7 +3,8 @@
 
 #define INFO // to see serial output of loop
 
-extern void sendMessage(String);
+extern void sendMessage(const char *topic,const char *message);
+//extern void sendMessage(String);
 extern void printMessage(String);
 
 void Touch::begin()
@@ -36,7 +37,7 @@ void Touch::loop()
       response.concat(i);
       response.concat("}");
 
-      sendMessage(response);
+      sendMessage("sn1/touch/touched", response.c_str());
 
       char buffer[50];
       sprintf(buffer, "%i touched", i);
@@ -52,7 +53,9 @@ void Touch::loop()
       response.concat(i);
       response.concat("}");
 
-      sendMessage(response);
+     // sendMessage(response);
+
+      sendMessage("sn1/touch/released", response.c_str());
 
       char buffer[50];
       sprintf(buffer, "%i released", i);

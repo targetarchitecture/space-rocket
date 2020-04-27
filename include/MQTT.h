@@ -9,9 +9,9 @@
 #include <PubSubClient.h>
 //#include <fmt/format.h>
 
-#include <fmt/core.h>
-#include <fmt/format.h>
-#include <fmt/format-inl.h>
+// #include <fmt/core.h>
+// #include <fmt/format.h>
+// #include <fmt/format-inl.h>
 //#include <src/format.cc>
 
 #include "credentials.h"
@@ -26,11 +26,7 @@ extern void printMessage(String);
 // void MQTT_loop();
 void reconnect();
 //void sendMessage(char *topic, String message);
-
-template <typename... Args>
-void sendMessage(const char *topic,const char* format, const Args & ... args);
-
-void prvSendMessage(const char *topic,const char *message, fmt::format_args args);
+void sendMessage(const char *topic,const char* message);
 
 void messageRecieved(char *topic, byte *payload, unsigned int length);
 void handleEvents(String topic,String payload);

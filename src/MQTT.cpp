@@ -18,20 +18,13 @@ void MQTT_begin()
 }
 
 //void sendMessage(String topic, String message)
-void prvSendMessage(char *topic,const char* message, fmt::format_args args)
+void sendMessage(char *topic,const char* message)
 {
-    std::string msg = fmt::format(message, args);
+    //std::string msg = fmt::format(message, args);
 
-    Serial.printf("Sending to MQTT: %s\n", msg.c_str());
+    Serial.printf("Sending to MQTT: %s\n", message);
 
-    MQTTClient.publish(topic, msg.c_str());
-}
-
-    template <typename... Args>
-void sendMessage(const char *topic,const char* message, const Args & ... args) 
-{
-
-    prvSendMessage(topic, message, fmt::make_format_args(args...));
+    MQTTClient.publish(topic, message);
 }
 
 void setupWifi()
