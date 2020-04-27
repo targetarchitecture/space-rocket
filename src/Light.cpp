@@ -21,13 +21,13 @@ void Light::begin()
     }
 }
 
-void Light::execute(std::list<String> values)
+void Light::execute(String topic, String payload)
 {
     try
     {
-        String function = values.front();
-        values.pop_front();
-        int pin = values.front().toInt();
+        String function = payload;
+       // values.pop_front();
+        int pin =payload.toInt();
 
         Serial.print("function:");
         Serial.println(function);
@@ -36,79 +36,79 @@ void Light::execute(std::list<String> values)
 
         if (function.equalsIgnoreCase("on"))
         {
-            for (const String &otherPins : values)
-            {
-                //set method for the pins so we can figure out how to turn it
-                Method[otherPins.toInt()] = "on";
+            // for (const String &otherPins : values)
+            // {
+            //     //set method for the pins so we can figure out how to turn it
+            //     Method[otherPins.toInt()] = "on";
 
-                sx1509.pinMode(otherPins.toInt(), OUTPUT);    // Set LED pin to OUTPUT
-                sx1509.digitalWrite(otherPins.toInt(), HIGH); //set to ON for Ada!
+            //     sx1509.pinMode(otherPins.toInt(), OUTPUT);    // Set LED pin to OUTPUT
+            //     sx1509.digitalWrite(otherPins.toInt(), HIGH); //set to ON for Ada!
 
-                delay(10);
-            }
+            //     delay(10);
+            // }
         }
 
         if (function.equalsIgnoreCase("off"))
         {
-            for (const String &otherPins : values)
-            {
-                if (Method[pin].equalsIgnoreCase("on"))
-                {
-                    sx1509.digitalWrite(otherPins.toInt(), LOW); //set to OFF
-                }
-                if (Method[pin].equalsIgnoreCase("blink"))
-                {
-                    sx1509.setupBlink(otherPins.toInt(), 0, 0);
-                }
-                if (Method[pin].equalsIgnoreCase("breathe"))
-                {
-                    sx1509.setupBlink(otherPins.toInt(), 0, 0);
-                }
-                delay(10);
-            }
+            // for (const String &otherPins : values)
+            // {
+            //     if (Method[pin].equalsIgnoreCase("on"))
+            //     {
+            //         sx1509.digitalWrite(otherPins.toInt(), LOW); //set to OFF
+            //     }
+            //     if (Method[pin].equalsIgnoreCase("blink"))
+            //     {
+            //         sx1509.setupBlink(otherPins.toInt(), 0, 0);
+            //     }
+            //     if (Method[pin].equalsIgnoreCase("breathe"))
+            //     {
+            //         sx1509.setupBlink(otherPins.toInt(), 0, 0);
+            //     }
+            //     delay(10);
+            // }
         }
 
         if (function.equalsIgnoreCase("breathe"))
         {
-            values.pop_front();
-            int timeOn = values.front().toInt();
-            values.pop_front();
-            int timeOff = values.front().toInt();
-            values.pop_front();
-            int timeRise = values.front().toInt();
-            values.pop_front();
-            int timeFall = values.front().toInt();
+        //     values.pop_front();
+        //     int timeOn = values.front().toInt();
+        //     values.pop_front();
+        //     int timeOff = values.front().toInt();
+        //     values.pop_front();
+        //     int timeRise = values.front().toInt();
+        //     values.pop_front();
+        //     int timeFall = values.front().toInt();
 
-            sx1509.pinMode(pin, ANALOG_OUTPUT);                       // To breathe an LED, make sure you set it as an ANALOG_OUTPUT, so we can PWM the pin
-            sx1509.breathe(pin, timeOn, timeOff, timeRise, timeFall); // Breathe an LED: 1000ms LOW, 500ms HIGH, 500ms to rise from low to high, 250ms to fall from high to low
+        //     sx1509.pinMode(pin, ANALOG_OUTPUT);                       // To breathe an LED, make sure you set it as an ANALOG_OUTPUT, so we can PWM the pin
+        //     sx1509.breathe(pin, timeOn, timeOff, timeRise, timeFall); // Breathe an LED: 1000ms LOW, 500ms HIGH, 500ms to rise from low to high, 250ms to fall from high to low
 
-            //set method for the pins so we can figure out how to turn it
-            Method[pin] = "breathe";
+        //     //set method for the pins so we can figure out how to turn it
+        //     Method[pin] = "breathe";
 
-            Serial.print("timeOn:");
-            Serial.println(timeOn);
-            Serial.print("timeOff:");
-            Serial.println(timeOff);
-            Serial.print("timeRise:");
-            Serial.println(timeRise);
-            Serial.print("timeFall:");
-            Serial.println(timeFall);
+        //     Serial.print("timeOn:");
+        //     Serial.println(timeOn);
+        //     Serial.print("timeOff:");
+        //     Serial.println(timeOff);
+        //     Serial.print("timeRise:");
+        //     Serial.println(timeRise);
+        //     Serial.print("timeFall:");
+        //     Serial.println(timeFall);
 
             //sx1509.breathe(pin, 1000, 5000, 3000, 2500);
         }
 
         if (function.equalsIgnoreCase("blink"))
         {
-            values.pop_front();
-            int timeOn = values.front().toInt();
-            values.pop_front();
-            int timeOff = values.front().toInt();
+            // values.pop_front();
+            // int timeOn = values.front().toInt();
+            // values.pop_front();
+            // int timeOff = values.front().toInt();
 
-            sx1509.pinMode(pin, ANALOG_OUTPUT); // Set LED pin to OUTPUT
-            sx1509.blink(pin, timeOn, timeOff); // Blink the LED pin -- ~1000 ms LOW, ~500 ms HIGH:
+            // sx1509.pinMode(pin, ANALOG_OUTPUT); // Set LED pin to OUTPUT
+            // sx1509.blink(pin, timeOn, timeOff); // Blink the LED pin -- ~1000 ms LOW, ~500 ms HIGH:
 
-            //set method for the pins so we can figure out how to turn it
-            Method[pin] = "blink";
+            // //set method for the pins so we can figure out how to turn it
+            // Method[pin] = "blink";
         }
     }
     catch (int e)

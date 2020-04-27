@@ -78,68 +78,68 @@ void Features::setDACvoltage(double volts)
     printMessage(response);
 }
 
-void Features::execute(std::list<String> values)
+void Features::execute(String topic, String payload)
 {
-    String function = values.front();
-    values.pop_front();
+    // String function = values.front();
+    // values.pop_front();
 
-    Serial.print("function:");
-    Serial.println(function);
+    // Serial.print("function:");
+    // Serial.println(function);
 
-    if (function.equalsIgnoreCase("setDAC"))
-    {
-        double volts = values.front().toDouble();
+    // if (function.equalsIgnoreCase("setDAC"))
+    // {
+    //     double volts = values.front().toDouble();
 
-        Serial.print("setDAC:");
-        Serial.println(volts);
+    //     Serial.print("setDAC:");
+    //     Serial.println(volts);
 
-        setDACvoltage(volts);
-    }
+    //     setDACvoltage(volts);
+    // }
 
-    if (function.equalsIgnoreCase("encoderClear"))
-    {
-        long encoder = values.front().toInt();
+    // if (function.equalsIgnoreCase("encoderClear"))
+    // {
+    //     long encoder = values.front().toInt();
 
-        if (encoder == 1)
-        {
-            encoder1.clearCount();
-        }
-        else
-        {
-            encoder2.clearCount();
-        }
+    //     if (encoder == 1)
+    //     {
+    //         encoder1.clearCount();
+    //     }
+    //     else
+    //     {
+    //         encoder2.clearCount();
+    //     }
 
-        Serial.print("encoderClear:");
-        Serial.println(encoder);
-    }
+    //     Serial.print("encoderClear:");
+    //     Serial.println(encoder);
+    // }
 
-    if (function.equalsIgnoreCase("encoderCount"))
-    {
-        long encoder = values.front().toInt();
+    // if (function.equalsIgnoreCase("encoderCount"))
+    // {
+    //     long encoder = values.front().toInt();
 
-        if (encoder == 1)
-        {
-            int32_t newEncoder1Count = encoder1.getCount();
+    //     if (encoder == 1)
+    //     {
+    //         int32_t newEncoder1Count = encoder1.getCount();
 
-            // String response = "";
+    //         // String response = "";
 
-            // response.concat("{feature,encoderCount,1,");
-            // response.concat(newEncoder1Count);
-            // response.concat("}");
+    //         // response.concat("{feature,encoderCount,1,");
+    //         // response.concat(newEncoder1Count);
+    //         // response.concat("}");
 
-            // sendMessage(response);
-        }
-        else
-        {
-            int32_t newEncoder2Count = encoder2.getCount();
+    //         // sendMessage(response);
+    //     }
+    //     else
+    //     {
+    //         int32_t newEncoder2Count = encoder2.getCount();
 
-            // String response = "";
+    //         // String response = "";
 
-            // response.concat("{feature,encoderCount,2,");
-            // response.concat(newEncoder2Count);
-            // response.concat("}");
+    //         // response.concat("{feature,encoderCount,2,");
+    //         // response.concat(newEncoder2Count);
+    //         // response.concat("}");
 
-            // sendMessage(response);
-        }
-    }
+    //         // sendMessage(response);
+    //     }
+    // }
 }

@@ -14,7 +14,8 @@ class Light
 public:
   void begin();
   void loop();
-  void execute(std::list<String> values);
+  //void execute(std::list<String> values);
+  void execute(String topic, String payload);
 
 private:
   // SX1509 I2C address (set by ADDR1 and ADDR0 (00 by default):

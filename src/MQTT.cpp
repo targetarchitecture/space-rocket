@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "MQTT.h"
 
-
 void MQTT_begin()
 {
     btStop(); // turn off bluetooth (part of ESP32 core)
@@ -18,13 +17,21 @@ void MQTT_begin()
     // sendMessage("sn1/state","Connected to MQTT server: " + MQTTSVR);
 }
 
-
 //void sendMessage(String topic, String message)
-void sendMessage(char *topic, char *message)
+void prvSendMessage(char *topic,const char* message, fmt::format_args args)
 {
-    Serial.printf("Sending to MQTT: %s\n" , message);
+    std::string msg = fmt::format(message, args);
 
-    MQTTClient.publish(topic, message);
+    Serial.printf("Sending to MQTT: %s\n", msg.c_str());
+
+    MQTTClient.publish(topic, msg.c_str());
+}
+
+    template <typename... Args>
+void sendMessage(const char *topic,const char* message, const Args & ... args) 
+{
+
+    prvSendMessage(topic, message, fmt::make_format_args(args...));
 }
 
 void setupWifi()
@@ -112,32 +119,46 @@ void setupMQTTClient()
 
         Serial.println("subscribe");
 
-            for (auto &&topic : topics)
-            {
-                MQTTClient.subscribe(topic.c_str());
+        for (auto &&topic : topics)
+        {
+            MQTTClient.subscribe(topic.c_str());
 
-                Serial.println("subscribed to:" + topic);
-            }
+            Serial.println("subscribed to:" + topic);
+        }
     }
 }
 
 void messageRecieved(char *topic, byte *payload, unsigned int length)
 {
-    Serial.printf("Message arrived [%s]\n",topic);
+    Serial.printf("Message arrived [%s]\n", topic);
 
-    sn1/sound/
-
-    String partialMessage = "";
+    String builtMessage = "";
 
     for (int i = 0; i < length; i++)
     {
-        partialMessage += (char)payload[i];
+        builtMessage += (char)payload[i];
     }
 
-    Serial.println(partialMessage);
+    Serial.println(builtMessage);
 
-    
-
-//loopback?
-    message = partialMessage;
+    handleEvents(topic, builtMessage);
 }
+
+
+
+// //http://www.cplusplus.com/reference/list/list/pop_front/
+// std::list<String> splitStringToList(String msg)
+// {
+//     std::list<String> subStrings;
+//     int j = 0;
+//     for (int i = 0; i < msg.length(); i++)
+//     {
+//         if (msg.charAt(i) == ',')
+//         {
+//             subStrings.push_back(msg.substring(j, i));
+//             j = i + 1;
+//         }
+//     }
+//     subStrings.push_back(msg.substring(j, msg.length())); //to grab the last value of the string
+//     return subStrings;
+// }

@@ -2,7 +2,6 @@
 Ada's Super Computer
 **********************************************************/
 #include <Arduino.h>
-#include <list>
 
 #include "Display.h"
 #include "Sound.h"
@@ -22,9 +21,9 @@ Light light;
 //String message = ""; // a string to hold incoming data
 
 void printMessage(String);
-void handleEvents();
+//void handleEvents();
 //void sendMessage(String);
-std::list<String> splitStringToList(String);
+//std::list<String> splitStringToList(String);
 //std::list<String> debugs(String);
 void MQTT_begin();
 void MQTT_loop();
@@ -56,8 +55,6 @@ void loop()
 
     MQTT_loop();
 
-    handleEvents();
-
     delay(10);
 }
 
@@ -66,115 +63,24 @@ void printMessage(String message)
     display.printMessage(message);
 }
 
-void handleEvents()
+void handleEvents(String topic, String payload)
 {
-sn1/sound/
+    //topic.toLowerCase();
 
-    //   if (std::string(topic) == std::string(MQTT_STOP_TOPIC))
-    //   {
-    //     if (message.equalsIgnoreCase("stop") == true)
+    if (topic.startsWith("sn1/sound/") == true)
+    {
+        sound.execute(topic, payload);
+    }
+
+    // if (topic.startsWith)
+    //     ("sn1/light/")
     //     {
-    //       dfPlayer.stop(); // Stop the track
-    //       delay(200);
-    //       publishMQTTmessage("Stopped play");
     //     }
-    //   }
 
-    //   if (std::string(topic) == std::string(MQTT_PLAY_TOPIC))
-    //   {
-    //     int playTrack = message.toInt();
+    // if (topic.startsWith)
+    //     ("sn1/touch/")
+    //     {
+    //     }
 
-    //     dfPlayer.stop(); // Stop the track
-    //     delay(200);
-
-    //     dfPlayer.play(playTrack); // Play the track specified
-
-    //     publishMQTTmessage("Playing track " + message);
-    //   }
-
-    //   if (std::string(topic) == std::string(MQTT_VOLUME_TOPIC))
-    //   {
-    //     int nvsVolume = message.toInt();
-
-    //     dfPlayer.volume(nvsVolume);
-    //     delay(200);
-
-    //     publishMQTTmessage("Volume set to " + message);
-
-    //     settings.putInt("volume", nvsVolume);
-    //     nvsVolume = settings.getInt("volume", DefaultVolume);
-    //     publishMQTTmessage("Volume from NVS: " + String(nvsVolume));
-    //   }
-
-    if (message != "")
-    {
-        //remove troublesome characters
-        message.replace("{", "");
-        message.replace("}", "");
-        message.replace("\n", "");
-        message.trim();
-
-        //debug and print back
-        // Serial.print("message:");
-        // Serial.println(message);
-
-        std::list<String> splitMessage;
-
-        splitMessage.clear();
-        splitMessage = splitStringToList(message);
-
-        String action = splitMessage.front();
-        splitMessage.pop_front();
-
-        std::list<String> values = splitMessage;
-
-        //debug and print back
-        // Serial.print("action:");
-        // Serial.println(action);
-        // Serial.print("function:");
-        // Serial.println(function);
-        // Serial.print("values:");
-        // Serial.println(values);
-
-        if (action.equalsIgnoreCase("sound"))
-        {
-            sound.execute(values);
-        }
-        else if (action.equalsIgnoreCase("motion"))
-        {
-            motion.execute(values);
-        }
-        else if (action.equalsIgnoreCase("features"))
-        {
-            features.execute(values);
-        }
-        else
-        {
-            Serial.println("Message recieved in loop from MicroBit:" + message);
-            // Serial.println(message);
-        }
-        // else if (action.equalsIgnoreCase("message"))
-        // {
-        //     display.printMessage(message);
-        // }
-
-        message = "";
-    }
-}
-
-//http://www.cplusplus.com/reference/list/list/pop_front/
-std::list<String> splitStringToList(String msg)
-{
-    std::list<String> subStrings;
-    int j = 0;
-    for (int i = 0; i < msg.length(); i++)
-    {
-        if (msg.charAt(i) == ',')
-        {
-            subStrings.push_back(msg.substring(j, i));
-            j = i + 1;
-        }
-    }
-    subStrings.push_back(msg.substring(j, msg.length())); //to grab the last value of the string
-    return subStrings;
+    //motion.execute(values);
 }

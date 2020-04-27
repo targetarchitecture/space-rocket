@@ -82,26 +82,28 @@ float easeInOut( float t, float b, float c, float d )
 //   }
 // }
 
-void Motion::execute(std::list<String> values)
+void Motion::execute(String topic, String payload)
 {
   try
   {
-    String function = values.front();
-    values.pop_front();
-    int servo = values.front().toInt();
-    values.pop_front();
+    // String function = values.front();
+    // values.pop_front();
+    // int servo = values.front().toInt();
+    // values.pop_front();
 
-    Serial.print("function:");
-    Serial.println(function);
-    Serial.print("servo:");
-    Serial.println(servo);
+    // Serial.print("function:");
+    // Serial.println(function);
+    // Serial.print("servo:");
+    // Serial.println(servo);
+
+    String function = payload;
 
     if (function.equalsIgnoreCase("startPosition"))
     {
-      int startPosition = values.front().toInt();
+      // int startPosition = values.front().toInt();
 
-      Serial.print("startPosition:");
-      Serial.println(startPosition);
+      // Serial.print("startPosition:");
+      // Serial.println(startPosition);
 
       // Servos[servo].write(startPosition);
     }
@@ -115,28 +117,28 @@ void Motion::execute(std::list<String> values)
 
     if (function.equalsIgnoreCase("moveTo"))
     {
-      int degree = values.front().toInt();
-      values.pop_front();
-      int speed = values.front().toInt();
+      // int degree = values.front().toInt();
+      // values.pop_front();
+      // int speed = values.front().toInt();
 
-      Serial.print("degree:");
-      Serial.println(degree);
-      Serial.print("speed:");
-      Serial.println(speed);
+      // Serial.print("degree:");
+      // Serial.println(degree);
+      // Serial.print("speed:");
+      // Serial.println(speed);
 
       // Servos[servo].startEaseTo(degree, speed);
     }
 
     if (function.equalsIgnoreCase("setEasingType"))
     {
-      uint8_t easing = values.front().toInt();
+   //   uint8_t easing = values.front().toInt();
 
       //   Servos[servo].setEasingType(easing);
     }
 
     if (function.equalsIgnoreCase("setPWM"))
     {
-      uint8_t pwm = values.front().toInt();
+     // uint8_t pwm = values.front().toInt();
 
       //    Servos[servo].setPWM(pwm);
     }

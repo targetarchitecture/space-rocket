@@ -11,7 +11,11 @@
 #endif
 
 //extern void sendMessage(String);
-extern void sendMessage(char *topic, char *message);
+//extern void sendMessage(char *topic, char *message);
+template <typename... Args>
+extern void sendMessage(const char *topic,const char *message, const Args & ... args);
+
+//extern void sendMessage(const char *topic, const char *message, fmt::format_args args);
 
 class Touch
 {

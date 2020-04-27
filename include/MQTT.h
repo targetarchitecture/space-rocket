@@ -1,11 +1,18 @@
-#ifndef MQTTWorker_h
-#define MQTTWorker_h
+#ifndef MQTT_h
+#define MQTT_h
 
 #include <Arduino.h>
+#include <list>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <ESPmDNS.h>
 #include <PubSubClient.h>
+//#include <fmt/format.h>
+
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/format-inl.h>
+//#include <src/format.cc>
 
 #include "credentials.h"
 
@@ -13,14 +20,20 @@ WiFiClient espClient;
 PubSubClient MQTTClient(espClient);
 
 extern void printMessage(String);
-extern String message;
+//extern String message;
 
 // void MQTT_begin();
 // void MQTT_loop();
 void reconnect();
 //void sendMessage(char *topic, String message);
-void sendMessage(char *topic, char *message);
+
+template <typename... Args>
+void sendMessage(const char *topic,const char* format, const Args & ... args);
+
+void prvSendMessage(const char *topic,const char *message, fmt::format_args args);
+
 void messageRecieved(char *topic, byte *payload, unsigned int length);
+void handleEvents(String topic,String payload);
 //void publishMQTTmessage(String msg);
 void setupWifi();
 void setupMQTTClient();
@@ -49,6 +62,5 @@ String topics[23] = {
     "sn1/light/pin/10",
     "sn1/light/pin/11",
     "sn1/state"};
-
 
 #endif

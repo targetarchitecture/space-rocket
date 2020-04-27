@@ -6,11 +6,13 @@
 #include <list>
 #include <Wire.h>
 //#include <fmt/core.h>
-#include <fmt/format.h>
+//#include <fmt/format.h>
 #include "DFRobotDFPlayerMini.h"
 
 //extern void sendMessage(String);
-extern void sendMessage(char *topic, char *message);
+//extern void sendMessage(char *topic, char *message);
+template <typename... Args>
+extern void sendMessage(const char *topic,const char *message, const Args & ... args);
 extern void printMessage(String);
 
 class Sound
@@ -18,7 +20,7 @@ class Sound
 public:
     void begin();
     void loop();
-    void execute(std::list<String> values);
+    void execute(String topic, String payload);
 
 private:
     DFRobotDFPlayerMini myDFPlayer;

@@ -41,6 +41,9 @@
         "cinttypes": "cpp",
         "utility": "cpp",
         "typeinfo": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "string_view": "cpp"
     }
 }
