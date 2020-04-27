@@ -1,20 +1,20 @@
 #ifndef Light_h
-
 #define Light_h
 
 #include <Arduino.h>
 #include <Wire.h>
-#include <list>
 #include <SparkFunSX1509.h> // Include SX1509 library
 
-extern void printMessage(String);
+extern void sendMessage(String topic, String message);
+extern void sendMessage(String topic, uint8_t message);
+extern void printMessage(String message);
+extern void printMessage(String message, uint8_t arg1);
 
 class Light
 {
 public:
   void begin();
   void loop();
-  //void execute(std::list<String> values);
   void execute(String topic, String payload);
 
 private:

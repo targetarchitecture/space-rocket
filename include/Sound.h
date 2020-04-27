@@ -4,14 +4,14 @@
 
 #include <Arduino.h>
 #include <list>
+#include <string>
 #include <Wire.h>
-//#include <fmt/format.h>
 #include "DFRobotDFPlayerMini.h"
 
-//extern void sendMessage(String);
-//extern void sendMessage(char *topic, char *message);
-extern void sendMessage(const char *topic,const char *message);
-extern void printMessage(String);
+extern void sendMessage(String topic, String message);
+extern void sendMessage(String topic, uint8_t message);
+extern void printMessage(String message);
+extern void printMessage(String message, uint8_t arg1);
 
 class Sound
 {

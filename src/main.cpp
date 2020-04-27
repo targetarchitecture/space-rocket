@@ -2,6 +2,7 @@
 Ada's Super Computer
 **********************************************************/
 #include <Arduino.h>
+#include <string>
 
 #include "Display.h"
 #include "Sound.h"
@@ -9,7 +10,6 @@ Ada's Super Computer
 #include "Light.h"
 #include "Motion.h"
 #include "Features.h"
-//#include "MQTTWorker.h"
 
 Display display;
 Sound sound;
@@ -18,13 +18,8 @@ Touch touch;
 Features features;
 Light light;
 
-//String message = ""; // a string to hold incoming data
-
-void printMessage(String);
-//void handleEvents();
-//void sendMessage(String);
-//std::list<String> splitStringToList(String);
-//std::list<String> debugs(String);
+void handleEvents(String topic, String payload);
+void printMessage(String message, uint8_t arg1);
 void MQTT_begin();
 void MQTT_loop();
 
@@ -63,24 +58,32 @@ void printMessage(String message)
     display.printMessage(message);
 }
 
+void printMessage(String message, uint8_t arg1)
+{
+    char buffer[50];
+    sprintf(buffer, message.c_str(), arg1);
+
+    display.printMessage(buffer);
+}
+
 void handleEvents(String topic, String payload)
 {
-    //topic.toLowerCase();
+    topic.toLowerCase();
 
     if (topic.startsWith("sn1/sound/") == true)
     {
         sound.execute(topic, payload);
     }
 
-    // if (topic.startsWith)
-    //     ("sn1/light/")
-    //     {
-    //     }
+    if (topic.startsWith("sn1/light/") == true)
+    {
+        light.execute(topic, payload);
+    }
 
-    // if (topic.startsWith)
-    //     ("sn1/touch/")
-    //     {
-    //     }
+    if (topic.startsWith("sn1/touch/") == true)
+    {
+       // touch.execute(topic, payload);
+    }
 
     //motion.execute(values);
 }

@@ -2,35 +2,24 @@
 #define MQTT_h
 
 #include <Arduino.h>
-#include <list>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <ESPmDNS.h>
 #include <PubSubClient.h>
-//#include <fmt/format.h>
-
-// #include <fmt/core.h>
-// #include <fmt/format.h>
-// #include <fmt/format-inl.h>
-//#include <src/format.cc>
 
 #include "credentials.h"
 
 WiFiClient espClient;
 PubSubClient MQTTClient(espClient);
 
-extern void printMessage(String);
-//extern String message;
+extern void printMessage(String message);
+extern void printMessage(String message, uint8_t arg1);
 
-// void MQTT_begin();
-// void MQTT_loop();
 void reconnect();
-//void sendMessage(char *topic, String message);
-void sendMessage(const char *topic,const char* message);
-
+void sendMessage(String topic, String message);
+void sendMessage(String topic, uint8_t message);
 void messageRecieved(char *topic, byte *payload, unsigned int length);
-void handleEvents(String topic,String payload);
-//void publishMQTTmessage(String msg);
+void handleEvents(String topic, String payload);
 void setupWifi();
 void setupMQTTClient();
 

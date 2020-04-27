@@ -17,14 +17,20 @@ void MQTT_begin()
     // sendMessage("sn1/state","Connected to MQTT server: " + MQTTSVR);
 }
 
-//void sendMessage(String topic, String message)
-void sendMessage(char *topic,const char* message)
+void sendMessage(String topic, String message)
 {
-    //std::string msg = fmt::format(message, args);
+    Serial.printf("Sending to MQTT: %s\n", message.c_str());
 
-    Serial.printf("Sending to MQTT: %s\n", message);
+    MQTTClient.publish(topic.c_str(), message.c_str());
+}
 
-    MQTTClient.publish(topic, message);
+void sendMessage(String topic, uint8_t message)
+{
+    String str = (String)message;
+
+    Serial.printf("Sending to MQTT: %s\n", str.c_str());
+
+    MQTTClient.publish(topic.c_str(), str.c_str());
 }
 
 void setupWifi()
@@ -136,8 +142,6 @@ void messageRecieved(char *topic, byte *payload, unsigned int length)
 
     handleEvents(topic, builtMessage);
 }
-
-
 
 // //http://www.cplusplus.com/reference/list/list/pop_front/
 // std::list<String> splitStringToList(String msg)

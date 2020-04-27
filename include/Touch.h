@@ -10,11 +10,10 @@
 #define _BV(bit) (1 << (bit))
 #endif
 
-//extern void sendMessage(String);
-//extern void sendMessage(char *topic, char *message);
-extern void sendMessage(const char *topic,const char *message);
-
-//extern void sendMessage(const char *topic, const char *message, fmt::format_args args);
+extern void sendMessage(String topic, String message);
+extern void sendMessage(String topic, uint8_t message);
+extern void printMessage(String message);
+extern void printMessage(String message, uint8_t arg1);
 
 class Touch
 {

@@ -1,26 +1,20 @@
 #ifndef Features_h
-
 #define Features_h
 
 #include <Arduino.h>
-#include <list>
 #include <Wire.h>
-//#include <fmt/format.h>
 #include <ESP32Encoder.h>
 
-extern void sendMessage(const char *topic,const char *message);
-
-//extern void sendMessage(const char *topic, const char *message, fmt::format_args args);
-//extern void sendMessage(char *topic, char *message);
-//extern void sendMessage(String);
-extern void printMessage(String);
+extern void sendMessage(String topic, String message);
+extern void sendMessage(String topic, uint8_t message);
+extern void printMessage(String message);
+extern void printMessage(String message, uint8_t arg1);
 
 class Features
 {
 public:
   void begin();
   void loop();
-  //void execute(std::list<String> values);
   void execute(String topic, String payload);
 
 private:

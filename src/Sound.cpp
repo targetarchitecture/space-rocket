@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "Sound.h"
-
-using namespace std;
+#include <string>
 
 void Sound::begin()
 {
@@ -50,7 +49,7 @@ void Sound::loop()
 
   if (currentBusy != previousBusy)
   {
-    string message = "";// fmt::format("%s", currentBusy);
+    String message = (String) currentBusy;
 
     sendMessage("sn1/sound/busy", message.c_str());
 
@@ -85,8 +84,10 @@ void Sound::execute(String topic, String payload)
 
     myDFPlayer.volume(volume);
 
-    //std::string s = fmt::format("{sound,volume,%s}", volume);
-    //sendMessage("sn1/sound/volume"  s.c_str());
+    String message = (String)volume;
+
+    sendMessage("sn1/sound/volume" , message.c_str());
+
   }
 
   if (function.equalsIgnoreCase("play"))
@@ -124,14 +125,9 @@ void Sound::execute(String topic, String payload)
   {
     myDFPlayer.volumeDown();
 
-    // String response = "";
-    // response.concat("{sound,volume,");
-    // response.concat(myDFPlayer.readVolume());
-    // response.concat("}");
+   String volume =  (String)myDFPlayer.readVolume();
 
-    string message =""; // fmt::format("%s", myDFPlayer.readVolume());
-
-    sendMessage("sn1/sound/volume", message.c_str());
+    sendMessage("sn1/sound/volume", volume.c_str());
   }
 
   if (function.equalsIgnoreCase("readCurrentFileNumber"))
@@ -148,7 +144,7 @@ void Sound::execute(String topic, String payload)
 
 // message.
 
-std::string message ="";// std::format("The answer is {}.", 42);
+String message = (String)myDFPlayer.readCurrentFileNumber();
 
     sendMessage("sn1/sound/currentFile", message.c_str());
   }
@@ -157,66 +153,28 @@ std::string message ="";// std::format("The answer is {}.", 42);
   {
     myDFPlayer.volumeUp();
 
-    // String response = "";
-
-    // response.concat("{sound,volume,");
-    // response.concat(myDFPlayer.readVolume());
-    // response.concat("}");
-
-    // sendMessage(response);
-
-    string message = ""; //fmt::format("%s", myDFPlayer.readVolume());
+    String message = (String)myDFPlayer.readVolume();
 
     sendMessage("sn1/sound/volume", message.c_str());
   }
 
   if (function.equalsIgnoreCase("read busy"))
   {
-    // String response = "";
-
-    // response.concat("{sound,busy,");
-    // response.concat(busy());
-    // response.concat("}");
-
-    // sendMessage(response);
-
-    string message = ""; //fmt::format("%s", busy());
+    String message = (String) busy();
 
     sendMessage("sn1/sound/volume", message.c_str());
   }
 
   if (function.equalsIgnoreCase("readState"))
   {
-    //     String response = "";
-
-    //     response.concat("{sound,state,");
-    //     response.concat(myDFPlayer.readState());
-    //     response.concat("}");
-
-    //  sn1/sound/state
-
-    //     sendMessage(response);
-
-    //    sendMessage("sn1/sound/state", "%s", myDFPlayer.readState());
-
-    string message ="";// fmt::format("%s", myDFPlayer.readState());
+    String message =(String)myDFPlayer.readState();
 
     sendMessage("sn1/sound/state", message.c_str());
   }
 
   if (function.equalsIgnoreCase("read Volume"))
   {
-    //int volume = myDFPlayer.readVolume();
-
-    // String response = "";
-
-    // response.concat("{volume,");
-    // response.concat(volume);
-    // response.concat("}");
-
-    // sendMessage(response);
-
-    string message = "";// fmt::format("%s", myDFPlayer.readVolume());
+    String message = (String) myDFPlayer.readVolume();
 
     sendMessage("sn1/sound/volume", message.c_str());
   }

@@ -3,10 +3,6 @@
 
 #define INFO // to see serial output of loop
 
-extern void sendMessage(const char *topic,const char *message);
-//extern void sendMessage(String);
-extern void printMessage(String);
-
 void Touch::begin()
 {
   if (!cap.begin(0x5A))
@@ -26,41 +22,21 @@ void Touch::loop()
   // Get the currently touched pads
   currtouched = cap.touched();
 
-  for (uint8_t i = 0; i < 12; i++)
+  for (uint8_t pin = 0; pin < 12; pin++)
   {
     // it if *is* touched and *wasnt* touched before, alert!
-    if ((currtouched & _BV(i)) && !(lasttouched & _BV(i)))
+    if ((currtouched & _BV(pin)) && !(lasttouched & _BV(pin)))
     {
-      String response = "";
+      sendMessage("sn1/touch/touched", pin);
 
-      response.concat("{touch,touched,");
-      response.concat(i);
-      response.concat("}");
-
-      sendMessage("sn1/touch/touched", response.c_str());
-
-      char buffer[50];
-      sprintf(buffer, "%i touched", i);
-      String msg = buffer;
-      printMessage(msg);
+      printMessage("%i touched", pin);
     }
     // if it *was* touched and now *isnt*, alert!
-    if (!(currtouched & _BV(i)) && (lasttouched & _BV(i)))
+    if (!(currtouched & _BV(pin)) && (lasttouched & _BV(pin)))
     {
-      String response = "";
+      sendMessage("sn1/touch/released", pin);
 
-      response.concat("{touch,released,");
-      response.concat(i);
-      response.concat("}");
-
-     // sendMessage(response);
-
-      sendMessage("sn1/touch/released", response.c_str());
-
-      char buffer[50];
-      sprintf(buffer, "%i released", i);
-      String msg = buffer;
-      printMessage(msg);
+      printMessage("%i released", pin);
     }
   }
 
