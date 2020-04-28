@@ -8,8 +8,8 @@ void Touch::begin()
   if (!cap.begin(0x5A))
   {
     printMessage("MPR121 not found");
-    delay(500);
-    ESP.restart();
+    // delay(500);
+    // ESP.restart();
   }
   else
   {

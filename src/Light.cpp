@@ -8,8 +8,8 @@ void Light::begin()
     if (!sx1509.begin(SX1509_ADDRESS))
     {
         printMessage("SX1509 not found");
-        delay(500);
-        ESP.restart();
+        // delay(500);
+        // ESP.restart();
     }
     else
     {

@@ -8,12 +8,17 @@ void MQTT_begin()
     setupWifi();
     setupMQTTClient();
 
-    sendMessage("sn1/state", "IP address: ", WiFi.localIP().toString());
+    //set up mDNS name
+    if (!MDNS.begin(MDNS_HOSTNAME)) {
+        Serial.println("Error setting up MDNS responder!");
+    }
+
+    sendMessage("sn1/state", "IP address: " + WiFi.localIP().toString());
 }
 
 void sendMessage(String topic, String message, String arg1)
 {
-    Serial.printf("Sending to MQTT: %s\n", message.c_str());
+    Serial.printf("Sending to MQTT: %s - %s\n",topic.c_str(), message.c_str());
 
     char buffer[50];
     sprintf(buffer, message.c_str(), arg1);
@@ -23,7 +28,7 @@ void sendMessage(String topic, String message, String arg1)
 
 void sendMessage(String topic, String message)
 {
-    Serial.printf("Sending to MQTT: %s\n", message.c_str());
+    Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), message.c_str());
 
     MQTTClient.publish(topic.c_str(), message.c_str());
 }

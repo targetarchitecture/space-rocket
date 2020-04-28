@@ -17,27 +17,16 @@ void Motion::begin()
   {
     printMessage("Motion controller not found");
 
-    String response = "";
+    // String response = "";
+    // response.concat("Error code=");
+    // response.concat(tWireReturnCode);
 
-    response.concat("Error code=");
-    response.concat(tWireReturnCode);
+    printMessage("Error code=%i",tWireReturnCode);
 
-    printMessage(response);
-
-    delay(500);
-    ESP.restart();
+    // delay(500);
+    // ESP.restart();
   }
 }
-
-//https://learn.adafruit.com/making-adabot-part-2/source-code
-// float easeInOut(float t, float b, float c, float d)
-// {
-//   // Function used to smooth servo movements.
-//   if ((t /= d / 2) < 1)
-//     return c / 2 * t * t * t + b;
-
-//   return c / 2 * ((t -= 2) * t * t + 2) + b;
-// }
 
 void Motion::execute(String topic, String payload)
 {
@@ -62,7 +51,7 @@ void Motion::execute(String topic, String payload)
 
       PCA9685.writeMicroseconds(pin, microseconds); //map(degree, 0, 180, 380, 2540));
 
-      delay(10);
+      delay(10);      
     }
 
     // if (topic.equalsIgnoreCase("stopAll"))

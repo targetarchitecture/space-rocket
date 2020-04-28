@@ -75,6 +75,13 @@ int Sound::busy()
 
 void Sound::execute(String topic, String payload)
 {
+  // Serial.print("Message arrived for sound [");
+  // Serial.print(topic);
+  // Serial.println("]");
+
+  //make lower case
+  topic.toLowerCase();
+
   if (topic.equalsIgnoreCase("sn1/sound/volume"))
   {
     if (payload.equalsIgnoreCase("up"))
@@ -104,15 +111,15 @@ void Sound::execute(String topic, String payload)
     {
       myDFPlayer.next();
     }
-        else if (payload.equalsIgnoreCase("start"))
+    else if (payload.equalsIgnoreCase("start"))
     {
       myDFPlayer.start();
     }
-        else if (payload.equalsIgnoreCase("pause"))
+    else if (payload.equalsIgnoreCase("pause"))
     {
       myDFPlayer.pause();
     }
-        else if (payload.equalsIgnoreCase("stop"))
+    else if (payload.equalsIgnoreCase("stop"))
     {
       myDFPlayer.stop();
     }
@@ -123,13 +130,19 @@ void Sound::execute(String topic, String payload)
     }
   }
 
+  // if (topic.startsWith("sn1/sound"))
+  // {
+  //   //add a delay to see if this stops the shutdowns
+  //   delay(100);
+  // }
+
   // if (function.equalsIgnoreCase("readCurrentFileNumber"))
   // {
   //   String message = (String)myDFPlayer.readCurrentFileNumber();
 
   //   sendMessage("sn1/sound/currentFile", message.c_str());
   // }
- 
+
   // if (function.equalsIgnoreCase("read busy"))
   // {
   //   String message = (String)busy();
