@@ -5,148 +5,70 @@ void Motion::begin()
 {
   PCA9685.begin();
   PCA9685.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA9685.setPWMFreq(SERVO_FREQ);           // Analog servos run at ~50 Hz updates
+  PCA9685.setPWMFreq(50);                   // Analog servos run at ~50 Hz updates
 
-  // Wire.beginTransmission(PCA9685_DEFAULT_ADDRESS);
-  // uint8_t tWireReturnCode = Wire.endTransmission(true);
-  // if (tWireReturnCode == 0)
-  // {
-  //   printMessage("Found motion controller");
-  // }
-  // else
-  // {
-  //   printMessage("Motion controller not found");
+  Wire.beginTransmission(0x40);
+  uint8_t tWireReturnCode = Wire.endTransmission(true);
+  if (tWireReturnCode == 0)
+  {
+    printMessage("Found motion controller");
+  }
+  else
+  {
+    printMessage("Motion controller not found");
 
-  //   String response = "";
+    String response = "";
 
-  //   response.concat("Error code=");
-  //   response.concat(tWireReturnCode);
+    response.concat("Error code=");
+    response.concat(tWireReturnCode);
 
-  //   printMessage(response);
+    printMessage(response);
 
-  //   delay(500);
-  //   ESP.restart();
-  // }
-
-  // if (tWireReturnCode == 0)
-  // {
-  //   attachServos();
-  // }
-
-  // for (int i = 0; i < 4097; i++)
-  // {
-  //   Serial.print("PWM:");
-  //   Serial.println(i);
-
-  //   Servos[15].setPWM(i);
-
-  //   delay(100);
-  // }
+    delay(500);
+    ESP.restart();
+  }
 }
 
 //https://learn.adafruit.com/making-adabot-part-2/source-code
-float easeInOut( float t, float b, float c, float d )
-{
-  // Function used to smooth servo movements.
-  if ((t/=d/2) < 1) 
-    return c/2*t*t*t + b;
- 
-  return c/2*((t-=2)*t*t + 2) + b;
-}
-
-// void Motion::attachServos()
+// float easeInOut(float t, float b, float c, float d)
 // {
-//   for (int i = 0; i < 16; i++)
-//   {
-//     // Serial.print("attaching servo:");
-//     // Serial.println(i);
+//   // Function used to smooth servo movements.
+//   if ((t /= d / 2) < 1)
+//     return c / 2 * t * t * t + b;
 
-//     attachResults(i, Servos[i].attach(i));
-//   }
-
-//   //Serial.println("attached servos");
-// }
-
-// void Motion::attachResults(int pin, uint8_t results)
-// {
-//   if (results == INVALID_SERVO)
-//   {
-//     //Serial.println(F("Error attaching servo - maybe MAX_EASING_SERVOS=" STR(MAX_EASING_SERVOS) " is to small to hold all servos"));
-//     while (true)
-//     {
-//       digitalWrite(LED_BUILTIN, HIGH);
-//       delay(100);
-//       digitalWrite(LED_BUILTIN, LOW);
-//       delay(100);
-//     }
-//   }
+//   return c / 2 * ((t -= 2) * t * t + 2) + b;
 // }
 
 void Motion::execute(String topic, String payload)
 {
   try
   {
-    // String function = values.front();
-    // values.pop_front();
-    // int servo = values.front().toInt();
-    // values.pop_front();
-
-    // Serial.print("function:");
-    // Serial.println(function);
-    // Serial.print("servo:");
-    // Serial.println(servo);
-
-    String function = payload;
-
-    if (function.equalsIgnoreCase("startPosition"))
+    if (topic.equalsIgnoreCase("sn1/motion/pwm"))
     {
-      // int startPosition = values.front().toInt();
+      //Serial.print("servo PWM payload:");
+      //Serial.println(payload);
 
-      // Serial.print("startPosition:");
-      // Serial.println(startPosition);
+      std::list<String> values = split(payload);
 
-      // Servos[servo].write(startPosition);
+      //values.pop_front();
+      long pin = values.front().toInt();
+      values.pop_front();
+      long microseconds = values.front().toInt();
+
+      //Serial.print("servo pin:");
+      //Serial.println(pin);
+      //Serial.print("servo ms:");
+      //Serial.println(microseconds);
+
+      PCA9685.writeMicroseconds(pin, microseconds); //map(degree, 0, 180, 380, 2540));
+
+      delay(10);
     }
 
-    if (function.equalsIgnoreCase("stop"))
-    {
-      // int currentAngle = Servos[servo].getCurrentAngle();
-
-      //  Servos[servo].write(currentAngle);
-    }
-
-    if (function.equalsIgnoreCase("moveTo"))
-    {
-      // int degree = values.front().toInt();
-      // values.pop_front();
-      // int speed = values.front().toInt();
-
-      // Serial.print("degree:");
-      // Serial.println(degree);
-      // Serial.print("speed:");
-      // Serial.println(speed);
-
-      // Servos[servo].startEaseTo(degree, speed);
-    }
-
-    if (function.equalsIgnoreCase("setEasingType"))
-    {
-   //   uint8_t easing = values.front().toInt();
-
-      //   Servos[servo].setEasingType(easing);
-    }
-
-    if (function.equalsIgnoreCase("setPWM"))
-    {
-     // uint8_t pwm = values.front().toInt();
-
-      //    Servos[servo].setPWM(pwm);
-    }
-
-    if (function.equalsIgnoreCase("stopAll"))
-    {
-      //  stopAllServos();
-    }
+    // if (topic.equalsIgnoreCase("stopAll"))
+    // {
+    //   //  stopAllServos();
+    // }
   }
   catch (int e)
   {
@@ -163,7 +85,7 @@ void Motion::loop()
 
   //   previousMillis = currentMillis;
 
-  //   PCA9685.writeMicroseconds(1, map(degree, 0, 180, USMIN, USMAX));
+  // PCA9685.w..writeMicroseconds(1, map(degree, 0, 180, USMIN, USMAX));
 
   //   degree = degree + delta;
 
@@ -172,18 +94,20 @@ void Motion::loop()
   //   }
 }
 
-// bool currentInterruptsActive = isOneServoMoving();
+//http://www.cplusplus.com/reference/list/list/pop_front/
+std::list<String> Motion::split(String msg)
+{
+  std::list<String> subStrings;
+  int j = 0;
 
-// if (currentInterruptsActive != previouscurrentInterruptsActive)
-// {
-//   String response = "";
-
-//   response.concat("{motion,moving,");
-//   response.concat(currentInterruptsActive);
-//   response.concat("}");
-
-//   sendMessage(response);
-
-//   previouscurrentInterruptsActive = currentInterruptsActive;
-// }
-//}
+  for (int i = 0; i < msg.length(); i++)
+  {
+    if (msg.charAt(i) == ',')
+    {
+      subStrings.push_back(msg.substring(j, i));
+      j = i + 1;
+    }
+  }
+  subStrings.push_back(msg.substring(j, msg.length())); //to grab the last value of the string
+  return subStrings;
+}

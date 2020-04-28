@@ -17,7 +17,7 @@ void Light::begin()
 
         // Use the internal 2MHz oscillator.
         // Set LED clock to 500kHz (2MHz / (2^(3-1)):
-        sx1509.clock(INTERNAL_CLOCK_2MHZ, 3);
+        sx1509.clock(INTERNAL_CLOCK_2MHZ, 4);
     }
 }
 
@@ -25,90 +25,93 @@ void Light::execute(String topic, String payload)
 {
     try
     {
-        String function = payload;
-       // values.pop_front();
-        int pin =payload.toInt();
-
-        Serial.print("function:");
-        Serial.println(function);
-        Serial.print("pin:");
-        Serial.println(pin);
-
-        if (function.equalsIgnoreCase("on"))
+        if (topic.equalsIgnoreCase("sn1/light/on"))
         {
-            // for (const String &otherPins : values)
-            // {
-            //     //set method for the pins so we can figure out how to turn it
-            //     Method[otherPins.toInt()] = "on";
+            std::list<String> pins = split(payload);
 
-            //     sx1509.pinMode(otherPins.toInt(), OUTPUT);    // Set LED pin to OUTPUT
-            //     sx1509.digitalWrite(otherPins.toInt(), HIGH); //set to ON for Ada!
+            for (const String &pin : pins)
+            {
+                //set method for the pins so we can figure out how to turn it
+                Method[pin.toInt()] = "on";
 
-            //     delay(10);
-            // }
+                sx1509.pinMode(pin.toInt(), OUTPUT);    // Set LED pin to OUTPUT
+                sx1509.digitalWrite(pin.toInt(), HIGH); //set to ON for Ada!
+
+                delay(10);
+            }
         }
 
-        if (function.equalsIgnoreCase("off"))
+        if (topic.equalsIgnoreCase("sn1/light/off"))
         {
-            // for (const String &otherPins : values)
-            // {
-            //     if (Method[pin].equalsIgnoreCase("on"))
-            //     {
-            //         sx1509.digitalWrite(otherPins.toInt(), LOW); //set to OFF
-            //     }
-            //     if (Method[pin].equalsIgnoreCase("blink"))
-            //     {
-            //         sx1509.setupBlink(otherPins.toInt(), 0, 0);
-            //     }
-            //     if (Method[pin].equalsIgnoreCase("breathe"))
-            //     {
-            //         sx1509.setupBlink(otherPins.toInt(), 0, 0);
-            //     }
-            //     delay(10);
-            // }
+            std::list<String> pins = split(payload);
+
+            for (const String &pin : pins)
+            {
+                if (Method[pin.toInt()].equalsIgnoreCase("on"))
+                {
+                    sx1509.digitalWrite(pin.toInt(), LOW); //set to OFF
+                }
+                if (Method[pin.toInt()].equalsIgnoreCase("blink"))
+                {
+                    sx1509.setupBlink(pin.toInt(), 0, 0);
+                }
+                if (Method[pin.toInt()].equalsIgnoreCase("breathe"))
+                {
+                    sx1509.setupBlink(pin.toInt(), 0, 0);
+                }
+                delay(10);
+
+                //set method for the pins so we can figure out how to turn it
+                Method[pin.toInt()] = "off";
+            }
         }
 
-        if (function.equalsIgnoreCase("breathe"))
+        if (topic.equalsIgnoreCase("sn1/light/blink"))
         {
-        //     values.pop_front();
-        //     int timeOn = values.front().toInt();
-        //     values.pop_front();
-        //     int timeOff = values.front().toInt();
-        //     values.pop_front();
-        //     int timeRise = values.front().toInt();
-        //     values.pop_front();
-        //     int timeFall = values.front().toInt();
+            std::list<String> pins = split(payload);
 
-        //     sx1509.pinMode(pin, ANALOG_OUTPUT);                       // To breathe an LED, make sure you set it as an ANALOG_OUTPUT, so we can PWM the pin
-        //     sx1509.breathe(pin, timeOn, timeOff, timeRise, timeFall); // Breathe an LED: 1000ms LOW, 500ms HIGH, 500ms to rise from low to high, 250ms to fall from high to low
+            //pins.pop_front();
+            int timeOn = pins.front().toInt();
+            pins.pop_front();
+            int timeOff = pins.front().toInt();
+            pins.pop_front();
 
-        //     //set method for the pins so we can figure out how to turn it
-        //     Method[pin] = "breathe";
+            for (const String &pin : pins)
+            {
+                sx1509.pinMode(pin.toInt(), ANALOG_OUTPUT); // Set LED pin to OUTPUT
+                sx1509.blink(pin.toInt(), timeOn, timeOff); // Blink the LED pin -- ~1000 ms LOW, ~500 ms HIGH:
 
-        //     Serial.print("timeOn:");
-        //     Serial.println(timeOn);
-        //     Serial.print("timeOff:");
-        //     Serial.println(timeOff);
-        //     Serial.print("timeRise:");
-        //     Serial.println(timeRise);
-        //     Serial.print("timeFall:");
-        //     Serial.println(timeFall);
+                delay(10);
 
-            //sx1509.breathe(pin, 1000, 5000, 3000, 2500);
+                //set method for the pins so we can figure out how to turn it
+                Method[pin.toInt()] = "blink";
+            }
         }
 
-        if (function.equalsIgnoreCase("blink"))
+        if (topic.equalsIgnoreCase("sn1/light/breathe"))
         {
-            // values.pop_front();
-            // int timeOn = values.front().toInt();
-            // values.pop_front();
-            // int timeOff = values.front().toInt();
+            std::list<String> pins = split(payload);
 
-            // sx1509.pinMode(pin, ANALOG_OUTPUT); // Set LED pin to OUTPUT
-            // sx1509.blink(pin, timeOn, timeOff); // Blink the LED pin -- ~1000 ms LOW, ~500 ms HIGH:
+            //pins.pop_front();
+            long timeOn = pins.front().toInt();
+            pins.pop_front();
+            long timeOff = pins.front().toInt();
+            pins.pop_front();
+            long timeRise = pins.front().toInt();
+            pins.pop_front();
+            long timeFall = pins.front().toInt();
+            pins.pop_front();
 
-            // //set method for the pins so we can figure out how to turn it
-            // Method[pin] = "blink";
+            for (const String &pin : pins)
+            {
+                sx1509.pinMode(pin.toInt(), ANALOG_OUTPUT);                       // To breathe an LED, make sure you set it as an ANALOG_OUTPUT, so we can PWM the pin
+                sx1509.breathe(pin.toInt(), timeOn, timeOff, timeRise, timeFall); // Breathe an LED: 1000ms LOW, 500ms HIGH, 500ms to rise from low to high, 250ms to fall from high to low
+
+                delay(10);
+
+                //set method for the pins so we can figure out how to turn it
+                Method[pin.toInt()] = "breathe";
+            }
         }
     }
     catch (int e)
@@ -116,4 +119,22 @@ void Light::execute(String topic, String payload)
         Serial.print("An exception occurred. Exception Nr. ");
         Serial.println(e, DEC);
     }
+}
+
+//http://www.cplusplus.com/reference/list/list/pop_front/
+std::list<String> Light::split(String msg)
+{
+    std::list<String> subStrings;
+    int j = 0;
+
+    for (int i = 0; i < msg.length(); i++)
+    {
+        if (msg.charAt(i) == ',')
+        {
+            subStrings.push_back(msg.substring(j, i));
+            j = i + 1;
+        }
+    }
+    subStrings.push_back(msg.substring(j, msg.length())); //to grab the last value of the string
+    return subStrings;
 }

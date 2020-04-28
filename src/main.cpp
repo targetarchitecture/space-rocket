@@ -2,7 +2,6 @@
 Ada's Super Computer
 **********************************************************/
 #include <Arduino.h>
-#include <string>
 
 #include "Display.h"
 #include "Sound.h"
@@ -80,10 +79,8 @@ void handleEvents(String topic, String payload)
         light.execute(topic, payload);
     }
 
-    if (topic.startsWith("sn1/touch/") == true)
+    if (topic.startsWith("sn1/motion/") == true)
     {
-       // touch.execute(topic, payload);
+        motion.execute(topic, payload);
     }
-
-    //motion.execute(values);
 }

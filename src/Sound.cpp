@@ -49,7 +49,7 @@ void Sound::loop()
 
   if (currentBusy != previousBusy)
   {
-    String message = (String) currentBusy;
+    String message = (String)currentBusy;
 
     sendMessage("sn1/sound/busy", message.c_str());
 
@@ -75,107 +75,79 @@ int Sound::busy()
 
 void Sound::execute(String topic, String payload)
 {
-  String function = payload;
-
-  if (function.equalsIgnoreCase("volume"))
+  if (topic.equalsIgnoreCase("sn1/sound/volume"))
   {
-    int volume = payload.toInt();
-    volume = constrain(volume, 0, 30); //Set volume value (0~30).
+    if (payload.equalsIgnoreCase("up"))
+    {
+      myDFPlayer.volumeUp();
+    }
+    else if (payload.equalsIgnoreCase("down"))
+    {
+      myDFPlayer.volumeDown();
+    }
+    else
+    {
+      int volume = payload.toInt();
+      volume = constrain(volume, 0, 30); //Set volume value (0~30).
 
-    myDFPlayer.volume(volume);
-
-    String message = (String)volume;
-
-    sendMessage("sn1/sound/volume" , message.c_str());
-
+      myDFPlayer.volume(volume);
+    }
   }
 
-  if (function.equalsIgnoreCase("play"))
+  if (topic.equalsIgnoreCase("sn1/sound/play"))
   {
-    int fileNumber = payload.toInt();
-    myDFPlayer.play(fileNumber);
+    if (payload.equalsIgnoreCase("previous"))
+    {
+      myDFPlayer.previous();
+    }
+    else if (payload.equalsIgnoreCase("next"))
+    {
+      myDFPlayer.next();
+    }
+        else if (payload.equalsIgnoreCase("start"))
+    {
+      myDFPlayer.start();
+    }
+        else if (payload.equalsIgnoreCase("pause"))
+    {
+      myDFPlayer.pause();
+    }
+        else if (payload.equalsIgnoreCase("stop"))
+    {
+      myDFPlayer.stop();
+    }
+    else
+    {
+      int fileNumber = payload.toInt();
+      myDFPlayer.play(fileNumber);
+    }
   }
 
-  if (function.equalsIgnoreCase("previous"))
-  {
-    myDFPlayer.previous();
-  }
+  // if (function.equalsIgnoreCase("readCurrentFileNumber"))
+  // {
+  //   String message = (String)myDFPlayer.readCurrentFileNumber();
 
-  if (function.equalsIgnoreCase("next"))
-  {
-    myDFPlayer.next();
-  }
+  //   sendMessage("sn1/sound/currentFile", message.c_str());
+  // }
+ 
+  // if (function.equalsIgnoreCase("read busy"))
+  // {
+  //   String message = (String)busy();
 
-  if (function.equalsIgnoreCase("pause"))
-  {
-    myDFPlayer.pause();
-  }
+  //   sendMessage("sn1/sound/volume", message.c_str());
+  // }
 
-  if (function.equalsIgnoreCase("stop"))
-  {
-    myDFPlayer.stop();
-  }
+  // if (function.equalsIgnoreCase("readState"))
+  // {
+  //   String message = (String)myDFPlayer.readState();
 
-  if (function.equalsIgnoreCase("start"))
-  {
-    myDFPlayer.start();
-  }
+  //   sendMessage("sn1/sound/state", message.c_str());
+  // }
 
-  if (function.equalsIgnoreCase("volumeDown"))
-  {
-    myDFPlayer.volumeDown();
+  // if (function.equalsIgnoreCase("read Volume"))
+  // {
+  //   String message = (String)myDFPlayer.readVolume();
 
-   String volume =  (String)myDFPlayer.readVolume();
-
-    sendMessage("sn1/sound/volume", volume.c_str());
-  }
-
-  if (function.equalsIgnoreCase("readCurrentFileNumber"))
-  {
-    // String response = "";
-
-    // response.concat("{sound,currentFileNumber,");
-    // response.concat(myDFPlayer.readCurrentFileNumber());
-    // response.concat("}");
-
-    // sendMessage(response);
-
-//     string message = fmt::format("%s", myDFPlayer.readCurrentFileNumber());
-
-// message.
-
-String message = (String)myDFPlayer.readCurrentFileNumber();
-
-    sendMessage("sn1/sound/currentFile", message.c_str());
-  }
-
-  if (function.equalsIgnoreCase("volumeUp"))
-  {
-    myDFPlayer.volumeUp();
-
-    String message = (String)myDFPlayer.readVolume();
-
-    sendMessage("sn1/sound/volume", message.c_str());
-  }
-
-  if (function.equalsIgnoreCase("read busy"))
-  {
-    String message = (String) busy();
-
-    sendMessage("sn1/sound/volume", message.c_str());
-  }
-
-  if (function.equalsIgnoreCase("readState"))
-  {
-    String message =(String)myDFPlayer.readState();
-
-    sendMessage("sn1/sound/state", message.c_str());
-  }
-
-  if (function.equalsIgnoreCase("read Volume"))
-  {
-    String message = (String) myDFPlayer.readVolume();
-
-    sendMessage("sn1/sound/volume", message.c_str());
-  }
+  //   sendMessage("sn1/sound/volume", message.c_str());
+  // }
 }

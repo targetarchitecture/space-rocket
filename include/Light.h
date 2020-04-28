@@ -2,6 +2,7 @@
 #define Light_h
 
 #include <Arduino.h>
+#include <list>
 #include <Wire.h>
 #include <SparkFunSX1509.h> // Include SX1509 library
 
@@ -18,6 +19,7 @@ public:
   void execute(String topic, String payload);
 
 private:
+  std::list<String> split(String msg);
   // SX1509 I2C address (set by ADDR1 and ADDR0 (00 by default):
   const byte SX1509_ADDRESS = 0x3E; // SX1509 I2C address
   SX1509 sx1509;                    // Create an SX1509 object to be used throughout

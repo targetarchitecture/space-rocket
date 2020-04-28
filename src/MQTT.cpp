@@ -8,13 +8,17 @@ void MQTT_begin()
     setupWifi();
     setupMQTTClient();
 
-    // char *SSID = WIFI_SSID;
-    // char *mDNS = MDNS_HOSTNAME;
-    // char *MQTTSVR = MQTT_SERVER;
-    // sendMessage("sn1/state","Connected to SSID: " + SSID);
-    // sendMessage("sn1/state","IP address: " + WiFi.localIP().toString());
-    // sendMessage("sn1/state","mDNS: " + mDNS);
-    // sendMessage("sn1/state","Connected to MQTT server: " + MQTTSVR);
+    sendMessage("sn1/state", "IP address: ", WiFi.localIP().toString());
+}
+
+void sendMessage(String topic, String message, String arg1)
+{
+    Serial.printf("Sending to MQTT: %s\n", message.c_str());
+
+    char buffer[50];
+    sprintf(buffer, message.c_str(), arg1);
+
+    MQTTClient.publish(topic.c_str(), buffer);
 }
 
 void sendMessage(String topic, String message)
@@ -129,7 +133,7 @@ void setupMQTTClient()
 
 void messageRecieved(char *topic, byte *payload, unsigned int length)
 {
-    Serial.printf("Message arrived [%s]\n", topic);
+    //Serial.printf("Message arrived [%s]\n", topic);
 
     String builtMessage = "";
 
@@ -138,24 +142,8 @@ void messageRecieved(char *topic, byte *payload, unsigned int length)
         builtMessage += (char)payload[i];
     }
 
-    Serial.println(builtMessage);
+    //Serial.println(builtMessage);
 
     handleEvents(topic, builtMessage);
 }
 
-// //http://www.cplusplus.com/reference/list/list/pop_front/
-// std::list<String> splitStringToList(String msg)
-// {
-//     std::list<String> subStrings;
-//     int j = 0;
-//     for (int i = 0; i < msg.length(); i++)
-//     {
-//         if (msg.charAt(i) == ',')
-//         {
-//             subStrings.push_back(msg.substring(j, i));
-//             j = i + 1;
-//         }
-//     }
-//     subStrings.push_back(msg.substring(j, msg.length())); //to grab the last value of the string
-//     return subStrings;
-// }
