@@ -11,7 +11,9 @@ void Sound::begin()
 
   delay(waitPeriod); //For DFplayer?
 
-  if (!myDFPlayer.begin(Serial1, true, false))
+bool isAck = false;// true;
+
+  if (!myDFPlayer.begin(Serial1, isAck, false))
   {
     printMessage("DFplayer ERROR");
     delay(500);
@@ -19,7 +21,7 @@ void Sound::begin()
   }
   else
   {
-    myDFPlayer.setTimeOut(500); //Set serial communictaion time out 500ms
+    myDFPlayer.setTimeOut(5000); //Set serial communictaion time out 500ms
     myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
 
     fileCounts = myDFPlayer.readFileCounts();
@@ -126,15 +128,16 @@ void Sound::execute(String topic, String payload)
     else
     {
       int fileNumber = payload.toInt();
-      myDFPlayer.play(fileNumber);
+
+      playTrack(fileNumber);
     }
   }
 
-  // if (topic.startsWith("sn1/sound"))
-  // {
-  //   //add a delay to see if this stops the shutdowns
-  //   delay(100);
-  // }
+  if (topic.startsWith("sn1/sound"))
+  {
+    //add a delay to see if this stops the shutdowns
+    delay(100);
+  }
 
   // if (function.equalsIgnoreCase("readCurrentFileNumber"))
   // {
@@ -163,4 +166,29 @@ void Sound::execute(String topic, String payload)
 
   //   sendMessage("sn1/sound/volume", message.c_str());
   // }
+}
+
+void Sound::playTrack(uint8_t track)
+{
+  Serial.print("Track:");
+  Serial.println(track);
+
+  myDFPlayer.stop();
+  delay(200);
+  myDFPlayer.play(track);
+  delay(200);
+  int file = myDFPlayer.readCurrentFileNumber();
+
+  Serial.print("File:");
+  Serial.println(file);
+
+  while (file != track)
+  {
+    myDFPlayer.play(track);
+    delay(200);
+    file = myDFPlayer.readCurrentFileNumber();
+
+    Serial.print("Looping File:");
+    Serial.println(file);
+  }
 }

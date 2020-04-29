@@ -21,6 +21,7 @@ private:
   unsigned long previousMillis = 0;
   const long interval = 500;
   const uint textWidth = 26;
+  const uint32_t backgroundColour = TFT_BLACK;
 }; 
 
 #endif

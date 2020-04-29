@@ -24,17 +24,17 @@ void MQTT_loop();
 
 void setup()
 {
-    Serial.begin(115200); //ESP32 USB Port
-    Wire.begin();         //I2C bus
+    Serial.begin(115200);    //ESP32 USB Port
+    Wire.begin(); //I2C bus
 
     delay(10);
 
     display.begin();
-    sound.begin();
     touch.begin();
     features.begin();
     light.begin();
     motion.begin();
+        sound.begin();
 
     MQTT_begin();
 }

@@ -26,7 +26,8 @@ private:
     int busy();
     int previousBusy = -1;
     int fileCounts;
-    const uint32_t waitPeriod = 100;
+    const uint32_t waitPeriod = 3000;
+    void playTrack(uint8_t track);
 };
 
 #endif

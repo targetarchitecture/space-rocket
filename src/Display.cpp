@@ -4,28 +4,19 @@
 void Display::begin()
 {
     tft.init();
+
     tft.setRotation(1);
 
-    tft.fillScreen(TFT_BLACK);
+    tft.fillScreen(backgroundColour);
 
     // Set "cursor" at top left corner of display (0,0) and select font 2
     tft.setCursor(0, 0, 1);
 
     // Set the font colour to be white with a black background
-    tft.setTextColor(TFT_GREEN, TFT_BLACK);
+    tft.setTextColor(TFT_BLACK, backgroundColour);
 
     // We can now plot text on screen using the "print" class
     tft.println("42");
-    // tft.println("White text");
-
-    // tft.setTextColor(TFT_RED, TFT_BLACK);
-    // tft.println("Red text");
-
-    // tft.setTextColor(TFT_GREEN, TFT_BLACK);
-    // tft.println("Green text");
-
-    // tft.setTextColor(TFT_BLUE, TFT_BLACK);
-    // tft.println("Blue text");
 }
 
 void Display::loop()
@@ -59,15 +50,15 @@ void Display::show()
 
     tft.setTextSize(1);  // Font size
     tft.setCursor(0, 0); // Start at top-left corner
-    tft.setTextColor(TFT_SKYBLUE, TFT_BLACK);
+    tft.setTextColor(TFT_SKYBLUE, backgroundColour);
     tft.println(F("Ada's Super Computer"));
-    tft.setTextColor(0xFC9F, TFT_BLACK);
+    tft.setTextColor(0xFC9F, backgroundColour);
     tft.setTextSize(2);
     tft.print(F("Time: "));
     tft.println(millis());
 
     tft.setTextSize(1);
-    tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+    tft.setTextColor(TFT_YELLOW, backgroundColour);
 
     for (unsigned i = 0; i < lines.size(); ++i)
     {
