@@ -30,10 +30,10 @@ void setup()
     delay(10);
 
     display.begin();
-    touch.begin();
-    features.begin();
-    light.begin();
-    motion.begin();
+    // touch.begin();
+    // features.begin();
+    // light.begin();
+    // motion.begin();
         sound.begin();
 
     MQTT_begin();
@@ -43,9 +43,9 @@ void loop()
 {
     display.loop();
     sound.loop();
-    motion.loop();
-    touch.loop();
-    features.loop();
+    // motion.loop();
+    // touch.loop();
+    // features.loop();
 
     MQTT_loop();
 

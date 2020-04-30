@@ -19,6 +19,7 @@ public:
     void begin();
     void loop();
     void execute(String topic, String payload);
+    void detail(uint8_t type, int value);
 
 private:
     DFRobotDFPlayerMini myDFPlayer;
