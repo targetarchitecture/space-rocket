@@ -142,11 +142,11 @@ void Sound::execute(String topic, String payload)
     }
   }
 
-  if (topic.startsWith("sn1/sound"))
-  {
-    //add a delay to see if this stops the shutdowns
-    delay(100);
-  }
+  // if (topic.startsWith("sn1/sound"))
+  // {
+  //   //add a delay to see if this stops the shutdowns
+  //   delay(100);
+  // }
 
   // if (function.equalsIgnoreCase("readCurrentFileNumber"))
   // {
@@ -181,10 +181,6 @@ void Sound::playTrack(uint8_t track)
 {
   Serial.print("Track:");
   Serial.println(track);
-
-  //see if this works
-  myDFPlayer.volume(20); //Set volume value. From 0 to 30
-  delay(200);
 
   myDFPlayer.stop();
   delay(200);

@@ -12,3 +12,4 @@
 
 #define MDNS_HOSTNAME "SN1"
 
+#define OTA_PASSWORD "9e79e2c5-64cf-4a02-8a7f-a0209b036cf3"

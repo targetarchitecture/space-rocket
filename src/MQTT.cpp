@@ -6,10 +6,14 @@ void MQTT_begin()
     btStop(); // turn off bluetooth (part of ESP32 core)
 
     setupWifi();
+
+    setupOTA();
+
     setupMQTTClient();
 
     //set up mDNS name
-    if (!MDNS.begin(MDNS_HOSTNAME)) {
+    if (!MDNS.begin(MDNS_HOSTNAME))
+    {
         Serial.println("Error setting up MDNS responder!");
     }
 
@@ -18,7 +22,7 @@ void MQTT_begin()
 
 void sendMessage(String topic, String message, String arg1)
 {
-    Serial.printf("Sending to MQTT: %s - %s\n",topic.c_str(), message.c_str());
+    Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), message.c_str());
 
     char buffer[50];
     sprintf(buffer, message.c_str(), arg1);
@@ -97,6 +101,8 @@ void reconnect()
 
 void MQTT_loop()
 {
+    ArduinoOTA.handle();
+
     //MQTT section
     if (!MQTTClient.connected())
     {
@@ -152,3 +158,35 @@ void messageRecieved(char *topic, byte *payload, unsigned int length)
     handleEvents(topic, builtMessage);
 }
 
+void setupOTA()
+{
+    ArduinoOTA.setHostname(MDNS_HOSTNAME);
+    ArduinoOTA.setPassword(OTA_PASSWORD);
+
+    ArduinoOTA.onStart([]() {
+        Serial.println("Start");
+    });
+
+    ArduinoOTA.onEnd([]() {
+        Serial.println("\nEnd");
+    });
+
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+        Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+    });
+
+    ArduinoOTA.onError([](ota_error_t error) {
+        Serial.printf("Error[%u]: ", error);
+        if (error == OTA_AUTH_ERROR)
+            Serial.println("Auth Failed");
+        else if (error == OTA_BEGIN_ERROR)
+            Serial.println("Begin Failed");
+        else if (error == OTA_CONNECT_ERROR)
+            Serial.println("Connect Failed");
+        else if (error == OTA_RECEIVE_ERROR)
+            Serial.println("Receive Failed");
+        else if (error == OTA_END_ERROR)
+            Serial.println("End Failed");
+    });
+    ArduinoOTA.begin();
+}

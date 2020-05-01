@@ -35,30 +35,17 @@ void Motion::execute(String topic, String payload)
   {
     if (topic.equalsIgnoreCase("sn1/motion/pwm"))
     {
-      //Serial.print("servo PWM payload:");
-      //Serial.println(payload);
-
       std::list<String> values = split(payload);
 
-      //values.pop_front();
       long pin = values.front().toInt();
       values.pop_front();
       long microseconds = values.front().toInt();
 
-      //Serial.print("servo pin:");
-      //Serial.println(pin);
-      //Serial.print("servo ms:");
-      //Serial.println(microseconds);
-
-      PCA9685.writeMicroseconds(pin, microseconds); //map(degree, 0, 180, 380, 2540));
+      PCA9685.writeMicroseconds(pin, microseconds); 
 
       delay(10);
     }
 
-    // if (topic.equalsIgnoreCase("stopAll"))
-    // {
-    //   //  stopAllServos();
-    // }
   }
   catch (int e)
   {
@@ -71,19 +58,6 @@ void Motion::loop()
 {
   if (motionWorking == true)
   {
-    //unsigned long currentMillis = millis();
-
-    // if (currentMillis - previousMillis > 20) {
-
-    //   previousMillis = currentMillis;
-
-    // PCA9685.w..writeMicroseconds(1, map(degree, 0, 180, USMIN, USMAX));
-
-    //   degree = degree + delta;
-
-    //   if ((degree <= 0) || (degree >= 180)) {
-    //     delta = delta * -1;
-    //   }
   }
 }
 

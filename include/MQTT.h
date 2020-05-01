@@ -6,6 +6,7 @@
 #include <WiFiUdp.h>
 #include <ESPmDNS.h>
 #include <PubSubClient.h>
+#include <ArduinoOTA.h>
 
 #include "credentials.h"
 
@@ -23,6 +24,7 @@ void messageRecieved(char *topic, byte *payload, unsigned int length);
 void handleEvents(String topic, String payload);
 void setupWifi();
 void setupMQTTClient();
+void setupOTA();
 
 String topics[8] = {
     "sn1/sound/volume",
