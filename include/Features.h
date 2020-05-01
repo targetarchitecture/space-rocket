@@ -10,6 +10,9 @@ extern void sendMessage(String topic, uint8_t message);
 extern void printMessage(String message);
 extern void printMessage(String message, uint8_t arg1);
 
+extern const bool useDAC;
+extern const bool useEncoders;
+
 class Features
 {
 public:

@@ -8,8 +8,8 @@ void Light::begin()
     if (!sx1509.begin(SX1509_ADDRESS))
     {
         printMessage("SX1509 not found");
-        // delay(500);
-        // ESP.restart();
+
+        lightWorking = false;
     }
     else
     {
@@ -18,11 +18,18 @@ void Light::begin()
         // Use the internal 2MHz oscillator.
         // Set LED clock to 500kHz (2MHz / (2^(3-1)):
         sx1509.clock(INTERNAL_CLOCK_2MHZ, 4);
+
+        lightWorking = true;
     }
 }
 
 void Light::execute(String topic, String payload)
 {
+    if (lightWorking == false)
+    {
+        return;
+    }
+
     try
     {
         if (topic.equalsIgnoreCase("sn1/light/on"))

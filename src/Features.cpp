@@ -3,79 +3,91 @@
 
 void Features::begin()
 {
-    //set roatary encoder pins
-    pinMode(35, INPUT);
-    pinMode(39, INPUT);
+    if (useEncoders == true)
+    {
+        //set roatary encoder pins
+        pinMode(35, INPUT);
+        pinMode(39, INPUT);
 
-    // Enable the weak pull down resistors
-    ESP32Encoder::useInternalWeakPullResistors = true;
+        // Enable the weak pull down resistors
+        ESP32Encoder::useInternalWeakPullResistors = true;
 
-    // set starting count value
-    encoder1.setCount(0);
-    encoder2.setCount(0);
+        // set starting count value
+        encoder1.setCount(0);
+        encoder2.setCount(0);
 
-    // Attach pins for use as encoder pins
-    encoder1.attachHalfQuad(36, 39);
+        // Attach pins for use as encoder pins
+        encoder1.attachHalfQuad(36, 39);
 
-    // Attach pins for use as encoder pins
-    encoder2.attachHalfQuad(34, 35);
+        // Attach pins for use as encoder pins
+        encoder2.attachHalfQuad(34, 35);
 
-    printMessage("Setup Encoders");
+        printMessage("Setup Encoders");
+    }
 
-    String response = "";
+    if (useDAC == true)
+    {
+        String response = "";
 
-    response.concat("Setup DAC (");
-    response.concat(DAC2);
-    response.concat(")");
+        response.concat("Setup DAC (");
+        response.concat(DAC2);
+        response.concat(")");
 
-    printMessage(response);
+        printMessage(response);
+    }
 }
 
 void Features::loop()
 {
-    int32_t newEncoder1Count = encoder1.getCount();
-    int32_t newEncoder2Count = encoder2.getCount();
-
-    if (newEncoder1Count != encoder1Count)
+    if (useEncoders == true)
     {
-        // String response = "";
+        int32_t newEncoder1Count = encoder1.getCount();
+        int32_t newEncoder2Count = encoder2.getCount();
 
-        // response.concat("{feature,encoder,1,");
-        // response.concat(newEncoder1Count);
-        // response.concat("}");
+        if (newEncoder1Count != encoder1Count)
+        {
+            // String response = "";
 
-        // sendMessage(response);
+            // response.concat("{feature,encoder,1,");
+            // response.concat(newEncoder1Count);
+            // response.concat("}");
 
-        encoder1Count = newEncoder1Count;
-    }
+            // sendMessage(response);
 
-    if (newEncoder2Count != encoder2Count)
-    {
-        // String response = "";
+            encoder1Count = newEncoder1Count;
+        }
 
-        // response.concat("{feature,encoder,2,");
-        // response.concat(newEncoder2Count);
-        // response.concat("}");
+        if (newEncoder2Count != encoder2Count)
+        {
+            // String response = "";
 
-        // sendMessage(response);
+            // response.concat("{feature,encoder,2,");
+            // response.concat(newEncoder2Count);
+            // response.concat("}");
 
-        encoder2Count = newEncoder2Count;
+            // sendMessage(response);
+
+            encoder2Count = newEncoder2Count;
+        }
     }
 }
 
 void Features::setDACvoltage(double volts)
 {
-    uint8_t value = (255 / 3.3) * volts;
+    if (useDAC == true)
+    {
+        uint8_t value = (255 / 3.3) * volts;
 
-    dacWrite(DAC2, value);
+        dacWrite(DAC2, value);
 
-    String response = "";
+        String response = "";
 
-    response.concat("Set DAC to ");
-    response.concat(volts);
-    response.concat("v");
+        response.concat("Set DAC to ");
+        response.concat(volts);
+        response.concat("v");
 
-    printMessage(response);
+        printMessage(response);
+    }
 }
 
 void Features::execute(String topic, String payload)

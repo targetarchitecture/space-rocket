@@ -11,15 +11,17 @@ void Sound::begin()
 
   delay(waitPeriod); //For DFplayer?
 
-  bool isAck =  true;  
-  bool performReset =  false;
+  bool isAck = true;
+  bool performReset = false;
   long timeoutDuration = 750;
 
   if (!myDFPlayer.begin(Serial1, isAck, performReset))
   {
     printMessage("DFplayer ERROR");
-    delay(500);
-    ESP.restart();
+
+    soundWorking = false;
+
+    return;
   }
   else
   {
@@ -43,29 +45,27 @@ void Sound::begin()
       String msg = buffer;
 
       printMessage(msg);
+
+      soundWorking = true;
     }
   }
 }
 
 void Sound::loop()
 {
-  int currentBusy = busy();
-
-  if (currentBusy != previousBusy)
+  if (soundWorking == true)
   {
-    String message = (String)currentBusy;
+    int currentBusy = busy();
 
-    sendMessage("sn1/sound/busy", message.c_str());
+    if (currentBusy != previousBusy)
+    {
+      String message = (String)currentBusy;
 
-    previousBusy = currentBusy;
+      sendMessage("sn1/sound/busy", message.c_str());
+
+      previousBusy = currentBusy;
+    }
   }
-
-Serial.print(myDFPlayer.available());
-
- // if (myDFPlayer.available() ) {
-    detail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
- // }
-
 }
 
 int Sound::busy()
@@ -182,9 +182,9 @@ void Sound::playTrack(uint8_t track)
   Serial.print("Track:");
   Serial.println(track);
 
-//see if this works
-   myDFPlayer.volume(20);  //Set volume value. From 0 to 30
-   delay(200);
+  //see if this works
+  myDFPlayer.volume(20); //Set volume value. From 0 to 30
+  delay(200);
 
   myDFPlayer.stop();
   delay(200);
@@ -209,58 +209,60 @@ void Sound::playTrack(uint8_t track)
 
 void Sound::detail(uint8_t type, int value)
 {
-Serial.print(type);
+  Serial.print(type);
 
- switch (type) {
-   case TimeOut:
-     Serial.println(F("Time Out!"));
-     break;
-   case WrongStack:
-     Serial.println(F("Stack Wrong!"));
-     break;
-   case DFPlayerCardInserted:
-     Serial.println(F("Card Inserted!"));
-     break;
-   case DFPlayerCardRemoved:
-     Serial.println(F("Card Removed!"));
-     break;
-   case DFPlayerCardOnline:
-     Serial.println(F("Card Online!"));
-     break;
-   case DFPlayerPlayFinished:
-     Serial.print(F("Number:"));
-     Serial.print(value);
-     Serial.println(F(" Play Finished!"));
-     break;
-   case DFPlayerError:
-     Serial.print(F("DFPlayerError:"));
-     switch (value) {
-       case Busy:
-         Serial.println(F("Card not found"));
-         break;
-       case Sleeping:
-         Serial.println(F("Sleeping"));
-         break;
-       case SerialWrongStack:
-         Serial.println(F("Get Wrong Stack"));
-         break;
-       case CheckSumNotMatch:
-         Serial.println(F("Check Sum Not Match"));
-         break;
-       case FileIndexOut:
-         Serial.println(F("File Index Out of Bound"));
-         break;
-       case FileMismatch:
-         Serial.println(F("Cannot Find File"));
-         break;
-       case Advertise:
-         Serial.println(F("In Advertise"));
-         break;
-       default:
-         break;
-     }
-     break;
-   default:
-     break;
- }
+  switch (type)
+  {
+  case TimeOut:
+    Serial.println(F("Time Out!"));
+    break;
+  case WrongStack:
+    Serial.println(F("Stack Wrong!"));
+    break;
+  case DFPlayerCardInserted:
+    Serial.println(F("Card Inserted!"));
+    break;
+  case DFPlayerCardRemoved:
+    Serial.println(F("Card Removed!"));
+    break;
+  case DFPlayerCardOnline:
+    Serial.println(F("Card Online!"));
+    break;
+  case DFPlayerPlayFinished:
+    Serial.print(F("Number:"));
+    Serial.print(value);
+    Serial.println(F(" Play Finished!"));
+    break;
+  case DFPlayerError:
+    Serial.print(F("DFPlayerError:"));
+    switch (value)
+    {
+    case Busy:
+      Serial.println(F("Card not found"));
+      break;
+    case Sleeping:
+      Serial.println(F("Sleeping"));
+      break;
+    case SerialWrongStack:
+      Serial.println(F("Get Wrong Stack"));
+      break;
+    case CheckSumNotMatch:
+      Serial.println(F("Check Sum Not Match"));
+      break;
+    case FileIndexOut:
+      Serial.println(F("File Index Out of Bound"));
+      break;
+    case FileMismatch:
+      Serial.println(F("Cannot Find File"));
+      break;
+    case Advertise:
+      Serial.println(F("In Advertise"));
+      break;
+    default:
+      break;
+    }
+    break;
+  default:
+    break;
+  }
 }

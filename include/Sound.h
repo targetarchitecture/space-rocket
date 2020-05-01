@@ -20,6 +20,7 @@ public:
     void loop();
     void execute(String topic, String payload);
     void detail(uint8_t type, int value);
+    bool soundWorking = false;
 
 private:
     DFRobotDFPlayerMini myDFPlayer;
@@ -27,7 +28,7 @@ private:
     int busy();
     int previousBusy = -1;
     int fileCounts;
-    const uint32_t waitPeriod = 3000;
+    const uint32_t waitPeriod = 500;
     void playTrack(uint8_t track);
 };
 

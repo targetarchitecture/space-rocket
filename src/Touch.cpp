@@ -8,17 +8,24 @@ void Touch::begin()
   if (!cap.begin(0x5A))
   {
     printMessage("MPR121 not found");
-    // delay(500);
-    // ESP.restart();
+
+    touchWorking = false;
   }
   else
   {
     printMessage("Capacitive Touch found");
+
+    touchWorking = true;
   }
 }
 
 void Touch::loop()
 {
+  if (touchWorking == false)
+  {
+    return;
+  }
+
   // Get the currently touched pads
   currtouched = cap.touched();
 

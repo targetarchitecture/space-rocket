@@ -12,24 +12,25 @@ void Motion::begin()
   if (tWireReturnCode == 0)
   {
     printMessage("Found motion controller");
+
+    motionWorking = true;
   }
   else
   {
     printMessage("Motion controller not found");
+    printMessage("Error code=%i", tWireReturnCode);
 
-    // String response = "";
-    // response.concat("Error code=");
-    // response.concat(tWireReturnCode);
-
-    printMessage("Error code=%i",tWireReturnCode);
-
-    // delay(500);
-    // ESP.restart();
+    motionWorking = false;
   }
 }
 
 void Motion::execute(String topic, String payload)
 {
+  if (motionWorking == false)
+  {
+    return;
+  }
+
   try
   {
     if (topic.equalsIgnoreCase("sn1/motion/pwm"))
@@ -51,7 +52,7 @@ void Motion::execute(String topic, String payload)
 
       PCA9685.writeMicroseconds(pin, microseconds); //map(degree, 0, 180, 380, 2540));
 
-      delay(10);      
+      delay(10);
     }
 
     // if (topic.equalsIgnoreCase("stopAll"))
@@ -68,19 +69,22 @@ void Motion::execute(String topic, String payload)
 
 void Motion::loop()
 {
-  //unsigned long currentMillis = millis();
+  if (motionWorking == true)
+  {
+    //unsigned long currentMillis = millis();
 
-  // if (currentMillis - previousMillis > 20) {
+    // if (currentMillis - previousMillis > 20) {
 
-  //   previousMillis = currentMillis;
+    //   previousMillis = currentMillis;
 
-  // PCA9685.w..writeMicroseconds(1, map(degree, 0, 180, USMIN, USMAX));
+    // PCA9685.w..writeMicroseconds(1, map(degree, 0, 180, USMIN, USMAX));
 
-  //   degree = degree + delta;
+    //   degree = degree + delta;
 
-  //   if ((degree <= 0) || (degree >= 180)) {
-  //     delta = delta * -1;
-  //   }
+    //   if ((degree <= 0) || (degree >= 180)) {
+    //     delta = delta * -1;
+    //   }
+  }
 }
 
 //http://www.cplusplus.com/reference/list/list/pop_front/

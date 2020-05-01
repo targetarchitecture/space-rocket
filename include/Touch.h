@@ -20,6 +20,7 @@ class Touch
 public:
     void begin();
     void loop();
+    bool touchWorking = false;
 
 private:
     Adafruit_MPR121 cap = Adafruit_MPR121();

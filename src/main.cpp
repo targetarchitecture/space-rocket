@@ -22,19 +22,32 @@ void printMessage(String message, uint8_t arg1);
 void MQTT_begin();
 void MQTT_loop();
 
+const bool useDisplay = true;
+const bool useDAC = false;
+const bool useEncoders = false;
+
 void setup()
 {
-    Serial.begin(115200);    //ESP32 USB Port
-    Wire.begin(); //I2C bus
+    Wire.begin();         //I2C bus
+    Serial.begin(115200); //ESP32 USB Port
 
-    delay(10);
+    delay(100);
 
-    display.begin();
-    // touch.begin();
-    // features.begin();
-    // light.begin();
-    // motion.begin();
-        sound.begin();
+     if (useDisplay == true)
+     {
+        //SPI bus for display (faster frame rate)
+        display.begin();
+    }
+
+    if (useDAC == true || useEncoders == true)
+    {
+        features.begin();
+    }
+
+    touch.begin();
+    light.begin();
+    motion.begin();
+    sound.begin();
 
     MQTT_begin();
 }
@@ -43,9 +56,9 @@ void loop()
 {
     display.loop();
     sound.loop();
-    // motion.loop();
-    // touch.loop();
-    // features.loop();
+    motion.loop();
+    touch.loop();
+    features.loop();
 
     MQTT_loop();
 

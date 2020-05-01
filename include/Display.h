@@ -7,6 +7,8 @@
 #include <SPI.h>
 #include <TFT_eSPI.h> // Hardware-specific library
 
+extern const bool useDisplay;
+
 class Display
 {
 public:
@@ -21,7 +23,7 @@ private:
   unsigned long previousMillis = 0;
   const long interval = 500;
   const uint textWidth = 26;
-  const uint32_t backgroundColour = TFT_BLACK;
-}; 
+  //const uint32_t backgroundColour = TFT_CYAN;
+};
 
 #endif

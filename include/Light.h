@@ -17,6 +17,7 @@ public:
   void begin();
   void loop();
   void execute(String topic, String payload);
+  bool lightWorking = false;
 
 private:
   std::list<String> split(String msg);
