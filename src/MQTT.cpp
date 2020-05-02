@@ -12,9 +12,18 @@ void MQTT_begin()
     setupMQTTClient();
 
     //set up mDNS name
-    if (!MDNS.begin(MDNS_HOSTNAME))
+    //MDNS_HOSTNAME
+    if (!MDNS.begin("SN1"))
     {
         Serial.println("Error setting up MDNS responder!");
+    }
+    else
+    {
+        //set default instance
+        MDNS.setInstanceName("Ada's Super Computer / SN1");
+
+        // Add service to MDNS-SD
+        MDNS.addService("http", "tcp", 80);
     }
 
     sendMessage("sn1/state", "IP address: " + WiFi.localIP().toString());
@@ -101,8 +110,6 @@ void reconnect()
 
 void MQTT_loop()
 {
-    ArduinoOTA.handle();
-
     //MQTT section
     if (!MQTTClient.connected())
     {
