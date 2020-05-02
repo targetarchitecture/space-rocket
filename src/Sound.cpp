@@ -179,6 +179,8 @@ void Sound::execute(String topic, String payload)
 
 void Sound::playTrack(uint8_t track)
 {
+  track = constrain(track, 1, fileCounts); //Set track number
+  
   Serial.print("Track:");
   Serial.println(track);
 

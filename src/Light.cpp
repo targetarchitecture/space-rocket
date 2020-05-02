@@ -38,6 +38,9 @@ void Light::execute(String topic, String payload)
 
             for (const String &pin : pins)
             {
+                //stop the LED first
+                stop(pin.toInt());
+
                 //set method for the pins so we can figure out how to turn it
                 Method[pin.toInt()] = "on";
 
@@ -54,22 +57,7 @@ void Light::execute(String topic, String payload)
 
             for (const String &pin : pins)
             {
-                if (Method[pin.toInt()].equalsIgnoreCase("on"))
-                {
-                    sx1509.digitalWrite(pin.toInt(), LOW); //set to OFF
-                }
-                if (Method[pin.toInt()].equalsIgnoreCase("blink"))
-                {
-                    sx1509.setupBlink(pin.toInt(), 0, 0);
-                }
-                if (Method[pin.toInt()].equalsIgnoreCase("breathe"))
-                {
-                    sx1509.setupBlink(pin.toInt(), 0, 0);
-                }
-                delay(10);
-
-                //set method for the pins so we can figure out how to turn it
-                Method[pin.toInt()] = "off";
+                stop(pin.toInt());
             }
         }
 
@@ -85,6 +73,9 @@ void Light::execute(String topic, String payload)
 
             for (const String &pin : pins)
             {
+                //stop the LED first
+                stop(pin.toInt());
+
                 sx1509.pinMode(pin.toInt(), ANALOG_OUTPUT); // Set LED pin to OUTPUT
                 sx1509.blink(pin.toInt(), timeOn, timeOff); // Blink the LED pin -- ~1000 ms LOW, ~500 ms HIGH:
 
@@ -111,6 +102,9 @@ void Light::execute(String topic, String payload)
 
             for (const String &pin : pins)
             {
+                //stop the LED first
+                stop(pin.toInt());
+
                 sx1509.pinMode(pin.toInt(), ANALOG_OUTPUT);                       // To breathe an LED, make sure you set it as an ANALOG_OUTPUT, so we can PWM the pin
                 sx1509.breathe(pin.toInt(), timeOn, timeOff, timeRise, timeFall); // Breathe an LED: 1000ms LOW, 500ms HIGH, 500ms to rise from low to high, 250ms to fall from high to low
 
@@ -126,6 +120,26 @@ void Light::execute(String topic, String payload)
         Serial.print("An exception occurred. Exception Nr. ");
         Serial.println(e, DEC);
     }
+}
+
+void Light::stop(long pin)
+{
+    if (Method[pin].equalsIgnoreCase("on"))
+    {
+        sx1509.digitalWrite(pin, LOW); //set to OFF
+    }
+    if (Method[pin].equalsIgnoreCase("blink"))
+    {
+        sx1509.setupBlink(pin, 0, 0);
+    }
+    if (Method[pin].equalsIgnoreCase("breathe"))
+    {
+        sx1509.setupBlink(pin, 0, 0);
+    }
+    delay(10);
+
+    //set method for the pins so we can figure out how to turn it
+    Method[pin] = "off";
 }
 
 //http://www.cplusplus.com/reference/list/list/pop_front/
