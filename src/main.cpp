@@ -41,6 +41,9 @@ void setup()
         display.begin();
     }
 
+    //set up the MQTT
+    MQTT_begin();
+
     if (useDAC == true || useEncoders == true)
     {
         features.begin();
@@ -50,8 +53,6 @@ void setup()
     light.begin();
     motion.begin();
     sound.begin();
-
-    MQTT_begin();
 }
 
 void loop()

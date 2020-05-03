@@ -3,11 +3,13 @@
 #define Display_h
 
 #include <Arduino.h>
+#include <State.h>
 #include <vector>
 #include <SPI.h>
 #include <TFT_eSPI.h> // Hardware-specific library
 
 extern const bool useDisplay;
+extern State state;
 
 class Display
 {
@@ -23,7 +25,7 @@ private:
   unsigned long previousMillis = 0;
   const long interval = 500;
   const uint textWidth = 26;
-  //const uint32_t backgroundColour = TFT_CYAN;
+  const uint32_t backgroundColour =  TFT_CYAN; //TFT_BLACK
 };
 
 #endif

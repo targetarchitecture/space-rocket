@@ -12,18 +12,23 @@ void MQTT_begin()
     setupMQTTClient();
 
     //set up mDNS name
-    //MDNS_HOSTNAME
-    if (!MDNS.begin("SN1"))
+    char *hostname = MDNS_HOSTNAME;
+
+    if (!MDNS.begin(hostname))
     {
         Serial.println("Error setting up MDNS responder!");
+
+        state.warning("Error setting up MDNS responder!");
     }
     else
     {
         //set default instance
-        MDNS.setInstanceName("Ada's Super Computer / SN1");
+        MDNS.setInstanceName(hostname);
 
         // Add service to MDNS-SD
-        MDNS.addService("http", "tcp", 80);
+        MDNS.addService("ota", "tcp", 1883);
+
+        state.current("MDNS working");
     }
 
     state.ipAddress(WiFi.localIP().toString());
@@ -89,7 +94,7 @@ void reconnect()
             Serial.println("connected");
 
             // Once connected, publish an announcement...
-            MQTTClient.publish("sn1/state", "Reconnected");
+            state.warning("Had to reconnect to MQTT server");
 
             // ... and resubscribe
             for (auto &&topic : topics)
@@ -123,7 +128,6 @@ void setupMQTTClient()
 {
     Serial.println("Connecting to MQTT server");
 
-    //MQTTClient.setClient(espClient);
     MQTTClient.setServer(MQTT_SERVER, 1883);
 
     // setup callbacks
@@ -136,7 +140,8 @@ void setupMQTTClient()
     if (MQTTClient.connect(clientId.c_str(), MQTT_USERNAME, MQTT_KEY))
     {
         Serial.println("Connected");
-        MQTTClient.publish("sn1/state", "Connected to MQTT server");
+
+        state.current("Connected to MQTT server");
 
         Serial.println("subscribe");
 

@@ -98,10 +98,16 @@ void Sound::execute(String topic, String payload)
     if (payload.equalsIgnoreCase("up"))
     {
       myDFPlayer.volumeUp();
+
+      //update MQTT
+      state.volume(myDFPlayer.readVolume());
     }
     else if (payload.equalsIgnoreCase("down"))
     {
       myDFPlayer.volumeDown();
+
+      //update MQTT
+      state.volume(myDFPlayer.readVolume());
     }
     else
     {
@@ -109,6 +115,9 @@ void Sound::execute(String topic, String payload)
       volume = constrain(volume, 0, 30); //Set volume value (0~30).
 
       myDFPlayer.volume(volume);
+
+      //update MQTT
+      state.volume(volume);
     }
   }
 
@@ -117,10 +126,14 @@ void Sound::execute(String topic, String payload)
     if (payload.equalsIgnoreCase("previous"))
     {
       myDFPlayer.previous();
+
+      sendCurrentFileNumber();
     }
     else if (payload.equalsIgnoreCase("next"))
     {
       myDFPlayer.next();
+
+      sendCurrentFileNumber();
     }
     else if (payload.equalsIgnoreCase("start"))
     {
@@ -141,46 +154,22 @@ void Sound::execute(String topic, String payload)
       playTrack(fileNumber);
     }
   }
+}
 
-  // if (topic.startsWith("sn1/sound"))
-  // {
-  //   //add a delay to see if this stops the shutdowns
-  //   delay(100);
-  // }
+void Sound::sendCurrentFileNumber()
+{
+  int file = myDFPlayer.readCurrentFileNumber();
 
-  // if (function.equalsIgnoreCase("readCurrentFileNumber"))
-  // {
-  //   String message = (String)myDFPlayer.readCurrentFileNumber();
+  Serial.print("sendCurrentFileNumber:");
+  Serial.println(file);
 
-  //   sendMessage("sn1/sound/currentFile", message.c_str());
-  // }
-
-  // if (function.equalsIgnoreCase("read busy"))
-  // {
-  //   String message = (String)busy();
-
-  //   sendMessage("sn1/sound/volume", message.c_str());
-  // }
-
-  // if (function.equalsIgnoreCase("readState"))
-  // {
-  //   String message = (String)myDFPlayer.readState();
-
-  //   sendMessage("sn1/sound/state", message.c_str());
-  // }
-
-  // if (function.equalsIgnoreCase("read Volume"))
-  // {
-  //   String message = (String)myDFPlayer.readVolume();
-
-  //   sendMessage("sn1/sound/volume", message.c_str());
-  // }
+  state.fileNumber(file);
 }
 
 void Sound::playTrack(uint8_t track)
 {
   track = constrain(track, 1, fileCounts); //Set track number
-  
+
   Serial.print("Track:");
   Serial.println(track);
 
@@ -203,6 +192,9 @@ void Sound::playTrack(uint8_t track)
     Serial.print("Looping File:");
     Serial.println(file);
   }
+
+  //update MQTT
+  state.fileNumber(file);
 }
 
 void Sound::detail(uint8_t type, int value)

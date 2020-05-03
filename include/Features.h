@@ -2,6 +2,7 @@
 #define Features_h
 
 #include <Arduino.h>
+#include <State.h>
 #include <Wire.h>
 #include <ESP32Encoder.h>
 
@@ -9,7 +10,7 @@ extern void sendMessage(String topic, String message);
 extern void sendMessage(String topic, uint8_t message);
 extern void printMessage(String message);
 extern void printMessage(String message, uint8_t arg1);
-
+extern State state;
 extern const bool useDAC;
 extern const bool useEncoders;
 

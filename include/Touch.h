@@ -1,8 +1,8 @@
 #ifndef Touch_h
-
 #define Touch_h
 
 #include <Arduino.h>
+#include <State.h>
 #include <Wire.h>
 #include "Adafruit_MPR121.h"
 
@@ -14,6 +14,7 @@ extern void sendMessage(String topic, String message);
 extern void sendMessage(String topic, uint8_t message);
 extern void printMessage(String message);
 extern void printMessage(String message, uint8_t arg1);
+extern State state;
 
 class Touch
 {
