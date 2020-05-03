@@ -101,4 +101,10 @@ void handleEvents(String topic, String payload)
     {
         motion.execute(topic, payload);
     }
+
+    if (topic.startsWith("sn1/display/") == true)
+    {
+        display.execute(topic, payload);
+    }
+
 }

@@ -17,6 +17,7 @@ public:
   void begin();
   void loop();
   void printMessage(String line);
+    void execute(String topic, String payload);
 
 private:
   TFT_eSPI tft = TFT_eSPI(); // Invoke custom library
@@ -25,7 +26,7 @@ private:
   unsigned long previousMillis = 0;
   const long interval = 500;
   const uint textWidth = 26;
-  const uint32_t backgroundColour =  TFT_CYAN; //TFT_BLACK
+  uint32_t backgroundColour =  TFT_PURPLE; //TFT_BLACK
 };
 
 #endif

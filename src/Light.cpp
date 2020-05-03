@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <limits.h>
+#include <algorithm> // for std::find
 #include "Light.h"
 
 void Light::begin()
@@ -45,7 +46,7 @@ void Light::execute(String topic, String payload)
                 //stop the LED first
                 stop(pin.toInt());
 
-                //set method for the pins so we can figure out how to turn it
+                //set method for the pins so we can figure out how to turn it off
                 Method[pin.toInt()] = "on";
 
                 sx1509.pinMode(pin.toInt(), OUTPUT);    // Set LED pin to OUTPUT
@@ -85,7 +86,7 @@ void Light::execute(String topic, String payload)
 
                 delay(10);
 
-                //set method for the pins so we can figure out how to turn it
+                //set method for the pins so we can figure out how to turn it off
                 Method[pin.toInt()] = "blink";
             }
         }
@@ -109,13 +110,31 @@ void Light::execute(String topic, String payload)
                 //stop the LED first
                 stop(pin.toInt());
 
-                sx1509.pinMode(pin.toInt(), ANALOG_OUTPUT);                       // To breathe an LED, make sure you set it as an ANALOG_OUTPUT, so we can PWM the pin
-                sx1509.breathe(pin.toInt(), timeOn, timeOff, timeRise, timeFall); // Breathe an LED: 1000ms LOW, 500ms HIGH, 500ms to rise from low to high, 250ms to fall from high to low
+                //these are the pins that can breathe
+                int breathablePins[] = {4, 5, 6, 7, 12, 13, 14, 15};
 
-                delay(10);
+                int *p;
+                p = std::find(breathablePins, breathablePins + 4, pin.toInt());
+                if (p == breathablePins + 4)
+                {
+                    String msg = "";
 
-                //set method for the pins so we can figure out how to turn it
-                Method[pin.toInt()] = "breathe";
+                    msg.concat("Pin ");
+                    msg.concat(pin);
+                    msg.concat(" cannot be set to breathe");
+
+                    state.error(msg);
+                }
+                else
+                {
+                    sx1509.pinMode(pin.toInt(), ANALOG_OUTPUT);                       // To breathe an LED, make sure you set it as an ANALOG_OUTPUT, so we can PWM the pin
+                    sx1509.breathe(pin.toInt(), timeOn, timeOff, timeRise, timeFall); // Breathe an LED: 1000ms LOW, 500ms HIGH, 500ms to rise from low to high, 250ms to fall from high to low
+
+                    delay(10);
+
+                    //set method for the pins so we can figure out how to turn it off
+                    Method[pin.toInt()] = "breathe";
+                }
             }
         }
     }

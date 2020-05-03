@@ -16,6 +16,14 @@ void Motion::begin()
     state.current("Found motion controller");
 
     motionWorking = true;
+
+    //initialise enabled array to allow servos to run 
+    bool enabled[16];
+
+    for (size_t i = 0; i < 16; i++)
+    {
+      enabled[i] = true;
+    }
   }
   else
   {
@@ -35,8 +43,24 @@ void Motion::execute(String topic, String payload)
     return;
   }
 
+  // Adafruit_PWMServoDriver::setPWM(num, 0, pulse);
+
   try
   {
+
+    if (topic.equalsIgnoreCase("sn1/motion/stop"))
+    {
+      std::list<String> values = split(payload);
+
+      long pin = values.front().toInt();
+      values.pop_front();
+      long microseconds = values.front().toInt();
+
+      PCA9685.writeMicroseconds(pin, microseconds);
+
+      delay(10);
+    }
+
     if (topic.equalsIgnoreCase("sn1/motion/pwm"))
     {
       std::list<String> values = split(payload);

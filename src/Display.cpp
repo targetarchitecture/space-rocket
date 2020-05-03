@@ -13,7 +13,7 @@ void Display::begin()
     tft.setCursor(0, 0, 1);
 
     // Set the font colour to be white with a black background
-     tft.setTextColor(TFT_GREEN, backgroundColour);
+    tft.setTextColor(TFT_GREEN, backgroundColour);
 
     // We can now plot text on screen using the "print" class
     tft.println("42");
@@ -34,8 +34,23 @@ void Display::loop()
     }
 }
 
+void Display::execute(String topic, String payload)
+{
+    if (topic.equalsIgnoreCase("sn1/display/background/colour"))
+    {
+        int rgb = payload.toInt();
+
+        backgroundColour = rgb;
+
+        String msg = "Display colour changed to ";
+        msg.concat(backgroundColour);
+
+        state.current(msg);
+    }
+}
+
 void Display::printMessage(String line)
-{    
+{
     //Serial.println(line);
 
     lines.push_back(line);
