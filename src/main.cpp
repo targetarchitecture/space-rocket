@@ -55,6 +55,7 @@ void setup()
     sound.begin();
 
     state.current("Completed main setup");
+    
 }
 
 void loop()

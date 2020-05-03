@@ -142,6 +142,8 @@ void setupMQTTClient()
         Serial.println("Connected");
 
         state.current("Connected to MQTT server");
+        state.error("");
+        state.warning("");
 
         Serial.println("subscribe");
 

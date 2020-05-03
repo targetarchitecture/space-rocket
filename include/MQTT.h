@@ -28,7 +28,7 @@ void setupWifi();
 void setupMQTTClient();
 void setupOTA();
 
-String topics[9] = {
+String topics[11] = {
     "sn1/sound/volume",
     "sn1/sound/play",
     "sn1/light/blink",
@@ -36,7 +36,9 @@ String topics[9] = {
     "sn1/light/on",
     "sn1/light/off",
     "sn1/motion/pwm",
+    "sn1/motion/us",
     "sn1/motion/stop",
+    "sn1/motion/start",
     "sn1/display/background/colour"};
 
 #endif

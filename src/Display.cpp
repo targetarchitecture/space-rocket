@@ -45,6 +45,8 @@ void Display::execute(String topic, String payload)
         String msg = "Display colour changed to ";
         msg.concat(backgroundColour);
 
+        tft.fillScreen(backgroundColour);
+
         state.current(msg);
     }
 }

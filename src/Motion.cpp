@@ -17,9 +17,7 @@ void Motion::begin()
 
     motionWorking = true;
 
-    //initialise enabled array to allow servos to run 
-    bool enabled[16];
-
+    //initialise enabled array to allow servos to run
     for (size_t i = 0; i < 16; i++)
     {
       enabled[i] = true;
@@ -43,12 +41,28 @@ void Motion::execute(String topic, String payload)
     return;
   }
 
-  // Adafruit_PWMServoDriver::setPWM(num, 0, pulse);
-
   try
   {
 
     if (topic.equalsIgnoreCase("sn1/motion/stop"))
+    {
+      long pin = payload.toInt();
+
+      PCA9685.setPin(pin,0);
+
+      delay(10);
+
+      enabled[pin] = false;
+    }
+
+    if (topic.equalsIgnoreCase("sn1/motion/start"))
+    {
+      long pin = payload.toInt();
+
+      enabled[pin] = true;
+    }
+
+    if (topic.equalsIgnoreCase("sn1/motion/us"))
     {
       std::list<String> values = split(payload);
 
@@ -56,7 +70,14 @@ void Motion::execute(String topic, String payload)
       values.pop_front();
       long microseconds = values.front().toInt();
 
-      PCA9685.writeMicroseconds(pin, microseconds);
+      if (enabled[pin] == true)
+      {
+        PCA9685.writeMicroseconds(pin, microseconds);
+      }
+      else
+      {
+        state.warning("Tried to move servo that is disabled");
+      }
 
       delay(10);
     }
@@ -67,15 +88,24 @@ void Motion::execute(String topic, String payload)
 
       long pin = values.front().toInt();
       values.pop_front();
-      long microseconds = values.front().toInt();
+      long pulse = values.front().toInt();
 
-      PCA9685.writeMicroseconds(pin, microseconds);
+      if (enabled[pin] == true)
+      {
+        PCA9685.setPWM(pin, 0, pulse);
+      }
+      else
+      {
+        state.warning("Tried to move servo that is disabled");
+      }
 
       delay(10);
     }
   }
   catch (int e)
   {
+    state.error("An exception occured in motion execute");
+
     Serial.print("An exception occurred. Exception Nr. ");
     Serial.println(e, DEC);
   }
