@@ -9,6 +9,7 @@ Ada's Super Computer
 #include "Light.h"
 #include "Motion.h"
 #include "Features.h"
+#include "State.h"
 
 Display display;
 Sound sound;
@@ -16,6 +17,7 @@ Motion motion;
 Touch touch;
 Features features;
 Light light;
+State state;
 
 void handleEvents(String topic, String payload);
 void printMessage(String message, uint8_t arg1);
@@ -33,8 +35,8 @@ void setup()
 
     delay(100);
 
-     if (useDisplay == true)
-     {
+    if (useDisplay == true)
+    {
         //SPI bus for display (faster frame rate)
         display.begin();
     }

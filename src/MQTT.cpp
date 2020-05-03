@@ -26,7 +26,7 @@ void MQTT_begin()
         MDNS.addService("http", "tcp", 80);
     }
 
-    sendMessage("sn1/state", "IP address: " + WiFi.localIP().toString());
+    state.ipAddress(WiFi.localIP().toString());
 }
 
 void sendMessage(String topic, String message, String arg1)

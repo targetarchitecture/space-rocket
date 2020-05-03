@@ -2,6 +2,7 @@
 #define MQTT_h
 
 #include <Arduino.h>
+#include <State.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <ESPmDNS.h>
@@ -15,6 +16,7 @@ PubSubClient MQTTClient(espClient);
 
 extern void printMessage(String message);
 extern void printMessage(String message, uint8_t arg1);
+extern State state;
 
 void reconnect();
 void sendMessage(String topic, String message);
