@@ -9,11 +9,15 @@ void Light::begin()
     {
         printMessage("SX1509 not found");
 
+        state.warning("SX1509 not found");
+
         lightWorking = false;
     }
     else
     {
         printMessage("SX1509 lighting found");
+
+        state.current("SX1509 lighting found");
 
         // Use the internal 2MHz oscillator.
         // Set LED clock to 500kHz (2MHz / (2^(3-1)):

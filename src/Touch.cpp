@@ -9,11 +9,15 @@ void Touch::begin()
   {
     printMessage("MPR121 not found");
 
+    state.warning("MPR121 not found");
+
     touchWorking = false;
   }
   else
   {
     printMessage("Capacitive Touch found");
+
+    state.current("Capacitive Touch found");
 
     touchWorking = true;
   }

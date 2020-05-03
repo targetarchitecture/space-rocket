@@ -55,7 +55,7 @@ void sendMessage(String topic, uint8_t message)
 {
     String str = (String)message;
 
-    Serial.printf("Sending to MQTT: %s\n", str.c_str());
+    Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), str.c_str());
 
     MQTTClient.publish(topic.c_str(), str.c_str());
 }

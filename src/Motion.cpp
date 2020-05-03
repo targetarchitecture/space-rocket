@@ -13,12 +13,16 @@ void Motion::begin()
   {
     printMessage("Found motion controller");
 
+    state.current("Found motion controller");
+
     motionWorking = true;
   }
   else
   {
     printMessage("Motion controller not found");
     printMessage("Error code=%i", tWireReturnCode);
+
+    state.warning("Motion controller not found");
 
     motionWorking = false;
   }
@@ -41,11 +45,10 @@ void Motion::execute(String topic, String payload)
       values.pop_front();
       long microseconds = values.front().toInt();
 
-      PCA9685.writeMicroseconds(pin, microseconds); 
+      PCA9685.writeMicroseconds(pin, microseconds);
 
       delay(10);
     }
-
   }
   catch (int e)
   {

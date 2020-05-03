@@ -53,6 +53,8 @@ void setup()
     light.begin();
     motion.begin();
     sound.begin();
+
+    state.current("Completed main setup");
 }
 
 void loop()

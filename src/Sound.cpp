@@ -19,6 +19,8 @@ void Sound::begin()
   {
     printMessage("DFplayer ERROR");
 
+    state.warning("DFPlayer error");
+
     soundWorking = false;
 
     return;
@@ -33,6 +35,9 @@ void Sound::begin()
     if (fileCounts == -1)
     {
       printMessage("DFplayer NO FILES FOUND");
+
+      state.error("DFplayer NO FILES FOUND");
+
       delay(500);
       ESP.restart();
     }
@@ -45,6 +50,11 @@ void Sound::begin()
       String msg = buffer;
 
       printMessage(msg);
+
+      state.current(msg);
+
+      //set MQTT of volume
+      state.volume(myDFPlayer.readVolume());
 
       soundWorking = true;
     }
