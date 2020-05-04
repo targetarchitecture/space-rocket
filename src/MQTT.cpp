@@ -16,7 +16,7 @@ void MQTT_begin()
 
 void sendMessage(String topic, String message, String arg1)
 {
-    Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), message.c_str());
+    //Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), message.c_str());
 
     char buffer[50];
     sprintf(buffer, message.c_str(), arg1);
@@ -26,7 +26,7 @@ void sendMessage(String topic, String message, String arg1)
 
 void sendMessage(String topic, String message)
 {
-    Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), message.c_str());
+    //Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), message.c_str());
 
     MQTTClient.publish(topic.c_str(), message.c_str());
 }
@@ -35,7 +35,7 @@ void sendMessage(String topic, uint8_t message)
 {
     String str = (String)message;
 
-    Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), str.c_str());
+    //Serial.printf("Sending to MQTT: %s - %s\n", topic.c_str(), str.c_str());
 
     MQTTClient.publish(topic.c_str(), str.c_str());
 }
@@ -64,14 +64,15 @@ void reconnect()
     {
         yield();
 
-        Serial.print("Attempting MQTT connection...");
+        //Serial.print("Attempting MQTT connection...");
+
         // Create a random client ID
         String clientId = MQTT_CLIENTID;
 
         // Attempt to connect
         if (MQTTClient.connect(clientId.c_str(), MQTT_USERNAME, MQTT_KEY))
         {
-            Serial.println("connected");
+            //Serial.println("connected");
 
             // Once connected, publish an announcement...
             state.warning("Had to reconnect to MQTT server");
@@ -84,9 +85,15 @@ void reconnect()
         }
         else
         {
-            Serial.print("failed, rc=");
-            Serial.print(MQTTClient.state());
-            Serial.println(" try again in 5 seconds");
+            // Serial.print("failed, rc=");
+            // Serial.print(MQTTClient.state());
+            // Serial.println(" try again in 5 seconds");
+
+            String msg = "Failed to reconnect to MQTT server with error:";
+            msg.concat(MQTTClient.state());
+
+            state.error(msg);
+
             // Wait 5 seconds before retrying
             delay(5000);
         }
@@ -108,32 +115,32 @@ void MQTT_loop()
 
 void setupMQTTClient()
 {
-    Serial.println("Connecting to MQTT server");
+    //Serial.println("Connecting to MQTT server");
 
     MQTTClient.setServer(MQTT_SERVER, 1883);
 
     // setup callbacks
     MQTTClient.setCallback(messageRecieved);
 
-    Serial.println("connect mqtt...");
+    //Serial.println("connect mqtt...");
 
     String clientId = MQTT_CLIENTID;
 
     if (MQTTClient.connect(clientId.c_str(), MQTT_USERNAME, MQTT_KEY))
     {
-        Serial.println("Connected");
+        //Serial.println("Connected");
 
         state.current("Connected to MQTT server");
         state.error("");
         state.warning("");
 
-        Serial.println("subscribe");
+        //Serial.println("subscribe");
 
         for (auto &&topic : topics)
         {
             MQTTClient.subscribe(topic.c_str());
 
-            Serial.println("subscribed to:" + topic);
+            //Serial.println("subscribed to:" + topic);
         }
     }
 }

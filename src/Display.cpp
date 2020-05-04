@@ -53,8 +53,6 @@ void Display::execute(String topic, String payload)
 
 void Display::printMessage(String line)
 {
-    //Serial.println(line);
-
     lines.push_back(line);
 
     if (lines.size() > 6)
@@ -71,8 +69,6 @@ void Display::show()
     {
         return;
     }
-
-    //tft.fillScreen(backgroundColour);
 
     tft.setTextSize(1);  // Font size
     tft.setCursor(0, 0); // Start at top-left corner

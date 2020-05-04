@@ -48,7 +48,7 @@ void Motion::execute(String topic, String payload)
     {
       long pin = payload.toInt();
 
-      PCA9685.setPin(pin,0);
+      PCA9685.setPin(pin, 0);
 
       delay(10);
 
@@ -104,10 +104,13 @@ void Motion::execute(String topic, String payload)
   }
   catch (int e)
   {
-    state.error("An exception occured in motion execute");
+    // Serial.print("An exception occurred. Exception Nr. ");
+    // Serial.println(e, DEC);
 
-    Serial.print("An exception occurred. Exception Nr. ");
-    Serial.println(e, DEC);
+    String msg = "An exception occurred in Motion execute. Exception Nr. ";
+    msg.concat(e);
+
+    state.error(msg);
   }
 }
 

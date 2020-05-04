@@ -140,8 +140,13 @@ void Light::execute(String topic, String payload)
     }
     catch (int e)
     {
-        Serial.print("An exception occurred. Exception Nr. ");
-        Serial.println(e, DEC);
+        // Serial.print("An exception occurred. Exception Nr. ");
+        // Serial.println(e, DEC);
+
+        String msg = "An exception occurred in Light execute. Exception Nr. ";
+        msg.concat(e);
+
+        state.error(msg);
     }
 }
 
