@@ -54,8 +54,7 @@ void setup()
     motion.begin();
     sound.begin();
 
-    state.current("Completed main setup");
-    
+    state.current("Completed main setup");    
 }
 
 void loop()

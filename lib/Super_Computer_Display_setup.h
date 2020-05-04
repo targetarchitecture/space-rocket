@@ -29,7 +29,7 @@
 
 // Comment out the #define below to stop the SPIFFS filing system and smooth font code being loaded
 // this will save ~20kbytes of FLASH
-// #define SMOOTH_FONT
+#define SMOOTH_FONT
 
 // #define SPI_FREQUENCY  20000000
 #define SPI_FREQUENCY 27000000 // Actually sets it to 26.67MHz = 80/3

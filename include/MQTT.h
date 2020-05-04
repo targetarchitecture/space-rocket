@@ -5,7 +5,7 @@
 #include <State.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
-#include <ESPmDNS.h>
+// #include <ESPmDNS.h>
 #include <PubSubClient.h>
 #include <ArduinoOTA.h>
 
