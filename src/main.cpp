@@ -55,6 +55,7 @@ void setup()
     sound.begin();
 
     state.current("Completed main setup");    
+    state.ready();
 }
 
 void loop()
@@ -106,5 +107,4 @@ void handleEvents(String topic, String payload)
     {
         display.execute(topic, payload);
     }
-
 }

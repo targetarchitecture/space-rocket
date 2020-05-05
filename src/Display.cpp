@@ -34,18 +34,36 @@ void Display::loop()
     }
 }
 
+
 void Display::execute(String topic, String payload)
 {
     if (topic.equalsIgnoreCase("sn1/display/background/colour"))
     {
-        int rgb = payload.toInt();
+        int rIndex = payload.indexOf("r");
+        int gIndex = payload.indexOf("g");
+        int bIndex = payload.indexOf("b");
 
-        backgroundColour = rgb;
+        int rcIndex = payload.indexOf(",", rIndex);
+        int gcIndex = payload.indexOf(",", gIndex);
+        int bcIndex = payload.indexOf(",", bIndex);
+
+        String r = payload.substring(rIndex+3, rcIndex);
+        String g = payload.substring(gIndex+3, gcIndex);
+        String b = payload.substring(bIndex+3, bcIndex);
+
+        backgroundColour = tft.color565(r.toInt(), g.toInt(), b.toInt());
+
+        tft.fillScreen(backgroundColour);
+
+        // String msg = "Display colour changed to R:";
+        // msg.concat(r);
+        // msg.concat(" , G:");
+        // msg.concat(g);
+        // msg.concat(" , B:");
+        // msg.concat(b);
 
         String msg = "Display colour changed to ";
         msg.concat(backgroundColour);
-
-        tft.fillScreen(backgroundColour);
 
         state.current(msg);
     }

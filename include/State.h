@@ -36,6 +36,8 @@ public:
 
     void current(const String &value);
     const String &current() const { return current_; }
+
+    void ready();
 };
 
 #endif

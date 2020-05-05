@@ -8,6 +8,11 @@ void State::ipAddress(const String &value)
     sendMessage("sn1/state/ip", ipAddress_);
 }
 
+void State::ready()
+{
+     sendMessage("sn1/state", "ready");
+}
+
 void State::volume(const int &value)
 {
     volume_ = value;
