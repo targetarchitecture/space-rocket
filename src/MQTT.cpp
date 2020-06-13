@@ -85,9 +85,9 @@ void reconnect()
         }
         else
         {
-            // Serial.print("failed, rc=");
-            // Serial.print(MQTTClient.state());
-            // Serial.println(" try again in 5 seconds");
+            Serial.print("failed, rc=");
+            Serial.print(MQTTClient.state());
+             Serial.println(" try again in 5 seconds");
 
             String msg = "Failed to reconnect to MQTT server with error:";
             msg.concat(MQTTClient.state());
